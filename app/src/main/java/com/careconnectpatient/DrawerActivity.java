@@ -25,6 +25,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import Drawer_fragments.AddPatientFragment;
 import Drawer_fragments.BluetoothFragment;
@@ -33,6 +34,7 @@ import Drawer_fragments.PatientListFragment;
 import Drawer_fragments.PreceptAssignFragment;
 import Drawer_fragments.PreceptFragment;
 import Drawer_fragments.RehabFragment;
+import database.Precept;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -327,16 +329,17 @@ public class DrawerActivity extends AppCompatActivity
 
     ChildEventListener cListener;
     Firebase childFirebase;
+    final ArrayList<String> doctorPatients = new ArrayList<>();
 
     @Override
     public void populateList(ListView listView) {
-        final ArrayList<String> patients = new ArrayList<>();
+//        final ArrayList<String> patients = new ArrayList<>();
         String doc_key = email.replace(".", "");
         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
                 + doc_key + "/");
 
         final ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, patients);
+                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, doctorPatients);
         listView.setAdapter(adapter);
 
         childFirebase = firebase.child("patients");
@@ -345,7 +348,9 @@ public class DrawerActivity extends AppCompatActivity
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String patient = (String) dataSnapshot.getValue();
                 Log.v("ADDING PATIENT TO LIST", patient);
-                patients.add(patient);
+                if(!doctorPatients.contains(patient)){
+                    doctorPatients.add(patient);
+                }
                 adapter.notifyDataSetChanged();
             }
 
@@ -353,7 +358,7 @@ public class DrawerActivity extends AppCompatActivity
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 String patient = (String) dataSnapshot.getValue();
                 Log.v("REMOVING PATIENT", patient);
-                patients.remove(patient);
+                doctorPatients.remove(patient);
                 adapter.notifyDataSetChanged();
             }
 
@@ -379,18 +384,55 @@ public class DrawerActivity extends AppCompatActivity
                       METHODS FOR ASSIGNING PRECEPT
     ////////////////////////////////////////////////////////////////*/
 
-    @Override
-    public void assignPrecept(int o_angle, int m_angle, int duration, int frequency) {
+    Firebase preceptFirebase;
+    ValueEventListener precpetListener;
 
+    @Override
+    public void assignPrecept(String patient_email, int o_angle, int m_angle, int duration, int frequency) {
+        preceptFirebase = new Firebase("https://care-connect.firebaseio.com/patients/"
+                + patient_email + "/precept");
+        final Precept precept = new Precept(o_angle, m_angle, duration, frequency);
+
+        precpetListener = preceptFirebase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(exists(dataSnapshot)){
+                    preceptExistsError();
+                }
+                else{
+                    preceptFirebase.setValue(precept);
+                    preceptAdded();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
+
+    public void preceptExistsError(){
+        preceptFirebase.removeEventListener(precpetListener);
+        Toast.makeText(getBaseContext(), "Precept for patient already added!", Toast.LENGTH_SHORT).show();
+    }
+
+    public void preceptAdded(){
+        preceptFirebase.removeEventListener(precpetListener);
+        Toast.makeText(getBaseContext(), "Precept added!", Toast.LENGTH_SHORT).show();
+    }
+
 
     @Override
     public void populateSpinner(Spinner spinner) {
         String doc_key = email.replace(".", "");
         final ArrayList<String> patients = new ArrayList<>();
-        final ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, patients);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, patients);
+//        final ArrayAdapter<String> finalAdapter = new ArrayAdapter<>(
+//                this,
+//                android.R.layout.simple_spinner_item,
+//                updateArray(patients));
 
         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
                 + doc_key + "/patients/");
@@ -423,6 +465,33 @@ public class DrawerActivity extends AppCompatActivity
 
             }
         });
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+    }
+
+    //Updating patients array with their full names instead of id_key
+    public String updatePatient(String tmp_patient){
+        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/" + tmp_patient);
+        final String[] new_patient = new String[1];
+        firebase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> pData = (Map<String, Object>)dataSnapshot.getValue();
+                new_patient[0] = getPatientFullName(pData);
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        return new_patient[0];
+    }
+
+    //Returning patient full names from database
+    public String getPatientFullName(Map<String, Object> map){
+        String name = (String)map.get("name");
+        String surname = (String)map.get("surname");
+        return name + " " + surname;
     }
 }

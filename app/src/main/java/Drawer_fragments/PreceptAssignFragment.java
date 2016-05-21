@@ -46,17 +46,19 @@ public class PreceptAssignFragment extends Fragment implements View.OnClickListe
     @Override
     public void onClick(final View v) {
         //TODO: create all editTexts
+        Spinner mPatientSpinnerView = (Spinner) getView().findViewById(R.id.precept_spinner);
         EditText mOptAngleView = (EditText) getView().findViewById(R.id.precept_opt_angle);
         EditText mMaxAngleView = (EditText) getView().findViewById(R.id.precept_max_angle);
         EditText mDurationView = (EditText) getView().findViewById(R.id.precept_duration);
         EditText mFrequencyView = (EditText) getView().findViewById(R.id.precept_frequency);
 
+        String patient = mPatientSpinnerView.getSelectedItem().toString();
         int o_angle = Integer.parseInt(mOptAngleView.getText().toString());
         int m_angle = Integer.parseInt(mMaxAngleView.getText().toString());
         int duration = Integer.parseInt(mDurationView.getText().toString());
         int frequency = Integer.parseInt(mFrequencyView.getText().toString());
 
-        mCommunicator.assignPrecept(o_angle, m_angle, duration, frequency);
+        mCommunicator.assignPrecept(patient, o_angle, m_angle, duration, frequency);
     }
 
     @Override
@@ -78,7 +80,7 @@ public class PreceptAssignFragment extends Fragment implements View.OnClickListe
     public interface preceptAssignListener{
         //TODO:assign all parameters to function
         void populateSpinner(Spinner spinner);
-        void assignPrecept(int o_angle, int m_angle, int duration, int frequency);
+        void assignPrecept(String patient, int o_angle, int m_angle, int duration, int frequency);
     }
 
 }

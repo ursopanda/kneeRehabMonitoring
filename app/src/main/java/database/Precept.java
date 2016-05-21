@@ -5,23 +5,12 @@ package database;
  */
 public class Precept {
 
-    int id;
     int optimal_angle;
     int maximal_angle;
     int duration;
     int frequency;
-    int patient_id;
 
     public Precept() {
-    }
-
-    public Precept(int id, int optimal_angle, int maximal_angle, int duration, int frequency, int patient_id) {
-        this.id = id;
-        this.optimal_angle = optimal_angle;
-        this.maximal_angle = maximal_angle;
-        this.duration = duration;
-        this.frequency = frequency;
-        this.patient_id = patient_id;
     }
 
     public Precept(int optimal_angle, int maximal_angle, int duration, int frequency) {
@@ -33,9 +22,6 @@ public class Precept {
 
     //SETTERS
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public void setOptimal_angle(int optimal_angle) {
         this.optimal_angle = optimal_angle;
@@ -53,15 +39,8 @@ public class Precept {
         this.frequency = frequency;
     }
 
-    public void setPatient_id(int patient_id) {
-        this.patient_id = patient_id;
-    }
-
     //GETTERS
 
-    public int getId() {
-        return id;
-    }
 
     public int getOptimal_angle() {
         return optimal_angle;
@@ -79,7 +58,4 @@ public class Precept {
         return frequency;
     }
 
-    public int getPatient_id() {
-        return patient_id;
-    }
 }
