@@ -1,0 +1,2 @@
+    configurations.maybeCreate("default")
+artifacts.add("default", file('guava-11.0.2.jar'))
