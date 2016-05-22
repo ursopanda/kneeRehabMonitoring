@@ -1,5 +1,8 @@
 package com.careconnectpatient;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -114,6 +117,9 @@ public class DrawerActivity extends AppCompatActivity
                 email = sharedPreferences.getString("doctor_email", "default@patient.com");
                 name = sharedPreferences.getString("doctor_name", null);
                 surname = sharedPreferences.getString("doctor_surname", null);
+
+                //Creates list for all doctor patients
+                createPatientList();
 
                 //Setting menu name for patient
                 String dFullName = "Dr. " + name + " " + surname;
@@ -238,6 +244,81 @@ public class DrawerActivity extends AppCompatActivity
         return true;
     }
 
+    /*//////////////////////////////////////////////////////////////////////////////////////////////////////////
+                     CREATING AN INITIAL PATIENT LIST FOR DOCTOR AND OTHER PATIENT LIST METHODS
+   /////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+    //All patient list with pat_keys
+    ArrayList<String> allPatients = new ArrayList<>();
+
+    //All patient list with full names
+    ArrayList<String> fullPatientsList = getFullPatientsList(allPatients);
+
+    //Method for creating an initial patient list for doctor signed in
+    public void createPatientList(){
+        String doc_key = email.replace(".", "");
+        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
+                + doc_key + "/");
+
+        Firebase childFirebase = firebase.child("patients");
+        childFirebase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String patient = (String) dataSnapshot.getValue();
+                Log.v("ADDING PATIENT TO LIST", patient);
+                if(!allPatients.contains(patient)){
+                    allPatients.add(patient);
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    //Method for getting full name list of patients
+    public ArrayList<String> getFullPatientsList(ArrayList<String> arrayList){
+        final ArrayList<String> tmp_list = new ArrayList<>();
+        for (String mPatient : arrayList){
+            Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/" + mPatient);
+            firebase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Map<String, Object> pData = (Map<String, Object>)dataSnapshot.getValue();
+                    tmp_list.add(getPatientFullName(pData));
+                }
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        }
+        return tmp_list;
+    }
+
+    //Returning patient full names from database
+    public String getPatientFullName(Map<String, Object> map){
+        String name = (String)map.get("name");
+        String surname = (String)map.get("surname");
+        return name + " " + surname;
+    }
+
     /*////////////////////////////////////////////////////////////////
                       METHODS FOR ADDING A PATIENT
     ////////////////////////////////////////////////////////////////*/
@@ -356,15 +437,14 @@ public class DrawerActivity extends AppCompatActivity
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                String patient = (String) dataSnapshot.getValue();
-                Log.v("REMOVING PATIENT", patient);
-                doctorPatients.remove(patient);
-                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                String patient = (String) dataSnapshot.getValue();
+                Log.v("REMOVING PATIENT", patient);
+                doctorPatients.remove(patient);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -423,75 +503,84 @@ public class DrawerActivity extends AppCompatActivity
     }
 
 
+//    @Override
+//    public void populateSpinner(Spinner spinner) {
+//        String doc_key = email.replace(".", "");
+//        final ArrayList<String> patients = new ArrayList<>();
+//
+//        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, patients);
+////        final ArrayAdapter<String> finalAdapter = new ArrayAdapter<>(
+////                this,
+////                android.R.layout.simple_spinner_item,
+////                updateArray(patients));
+//
+//        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
+//                + doc_key + "/patients/");
+//
+//        firebase.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                String patient = (String) dataSnapshot.getValue();
+//                patients.add(patient);
+//                adapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//        });
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        spinner.setAdapter(adapter);
+//    }
+
     @Override
-    public void populateSpinner(Spinner spinner) {
-        String doc_key = email.replace(".", "");
-        final ArrayList<String> patients = new ArrayList<>();
-
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, patients);
-//        final ArrayAdapter<String> finalAdapter = new ArrayAdapter<>(
-//                this,
-//                android.R.layout.simple_spinner_item,
-//                updateArray(patients));
-
-        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
-                + doc_key + "/patients/");
-
-        firebase.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String patient = (String) dataSnapshot.getValue();
-                patients.add(patient);
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
+    public void populateSpinner(Spinner spinner){
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                allPatients);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
 
-    //Updating patients array with their full names instead of id_key
-    public String updatePatient(String tmp_patient){
-        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/" + tmp_patient);
-        final String[] new_patient = new String[1];
-        firebase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String, Object> pData = (Map<String, Object>)dataSnapshot.getValue();
-                new_patient[0] = getPatientFullName(pData);
-            }
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-        return new_patient[0];
+    @Override
+    public void removeAssignment(final String patient_key, Context context) {
+        new AlertDialog.Builder(context)
+                .setTitle("Remove Precept")
+                .setMessage("Are you sure you want to remove the precept?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
+                                + patient_key + "/precept");
+                        Log.v("REMOVING PRECEPT FOR", patient_key);
+                        firebase.removeValue();
+                        Toast.makeText(getBaseContext(), "Precept removed!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_delete)
+                .show();
     }
 
-    //Returning patient full names from database
-    public String getPatientFullName(Map<String, Object> map){
-        String name = (String)map.get("name");
-        String surname = (String)map.get("surname");
-        return name + " " + surname;
-    }
+
 }

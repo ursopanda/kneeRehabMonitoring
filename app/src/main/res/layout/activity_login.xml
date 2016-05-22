@@ -79,7 +79,7 @@
 
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="160dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:text="@string/back"
             android:id="@+id/login_back"
@@ -91,7 +91,7 @@
 
         <Button
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="160dp"
+            android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:text="@string/action_sign_in"
             android:id="@+id/email_sign_in_button"
