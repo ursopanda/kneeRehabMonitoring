@@ -42,7 +42,7 @@ import database.Precept;
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         AddPatientFragment.addPatientListener, PatientListFragment.patientListListener,
-        PreceptAssignFragment.preceptAssignListener{
+        PreceptAssignFragment.preceptAssignListener, PreceptFragment.preceptListener {
 
     NavigationView navigationView = null;
     Toolbar toolbar = null;
@@ -50,6 +50,8 @@ public class DrawerActivity extends AppCompatActivity
     String name;
     String surname;
     String addPatientEmail;
+    String doctor_key;
+    String precept;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,7 @@ public class DrawerActivity extends AppCompatActivity
         SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         String user_type = sharedPreferences.getString("user_type", null);
 
-        switch (user_type){
+        switch (user_type) {
             case "patient":
                 //Set the initial (first) fragment for patient
                 RehabFragment patientInitialFragment = new RehabFragment();
@@ -94,6 +96,8 @@ public class DrawerActivity extends AppCompatActivity
                 email = sharedPreferences.getString("patient_email", "default@patient.com");
                 name = sharedPreferences.getString("patient_name", null);
                 surname = sharedPreferences.getString("patient_surname", null);
+                doctor_key = sharedPreferences.getString("doctor_key", "no_doctor");
+                precept = sharedPreferences.getString("precept", "no_precept");
 
                 //Setting menu name for patient
                 String pFullName = name + " " + surname;
@@ -141,12 +145,12 @@ public class DrawerActivity extends AppCompatActivity
 //        transaction.commit();
     }
 
-    public void setText(String fullName, String email){
+    public void setText(String fullName, String email) {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
-        TextView pFullName = (TextView)header.findViewById(R.id.drawer_name);
-        TextView pEmail = (TextView)header.findViewById(R.id.drawer_email);
+        TextView pFullName = (TextView) header.findViewById(R.id.drawer_name);
+        TextView pEmail = (TextView) header.findViewById(R.id.drawer_email);
         pFullName.setText(fullName);
         pEmail.setText(email);
     }
@@ -208,20 +212,19 @@ public class DrawerActivity extends AppCompatActivity
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.commit();
-        }
-        else if (id == R.id.nav_patient_list) {
+        } else if (id == R.id.nav_patient_list) {
             PatientListFragment fragment = new PatientListFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.commit();
-        }else if (id == R.id.nav_pac_precept) {
+        } else if (id == R.id.nav_pac_precept) {
             PreceptFragment fragment = new PreceptFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.commit();
-        }else if (id == R.id.nav_doc_precept) {
+        } else if (id == R.id.nav_doc_precept) {
             PreceptAssignFragment fragment = new PreceptAssignFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
@@ -255,7 +258,7 @@ public class DrawerActivity extends AppCompatActivity
     ArrayList<String> fullPatientsList = getFullPatientsList(allPatients);
 
     //Method for creating an initial patient list for doctor signed in
-    public void createPatientList(){
+    public void createPatientList() {
         String doc_key = email.replace(".", "");
         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
                 + doc_key + "/");
@@ -266,7 +269,7 @@ public class DrawerActivity extends AppCompatActivity
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String patient = (String) dataSnapshot.getValue();
                 Log.v("ADDING PATIENT TO LIST", patient);
-                if(!allPatients.contains(patient)){
+                if (!allPatients.contains(patient)) {
                     allPatients.add(patient);
                 }
             }
@@ -293,16 +296,17 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     //Method for getting full name list of patients
-    public ArrayList<String> getFullPatientsList(ArrayList<String> arrayList){
+    public ArrayList<String> getFullPatientsList(ArrayList<String> arrayList) {
         final ArrayList<String> tmp_list = new ArrayList<>();
-        for (String mPatient : arrayList){
+        for (String mPatient : arrayList) {
             Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/" + mPatient);
             firebase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    Map<String, Object> pData = (Map<String, Object>)dataSnapshot.getValue();
+                    Map<String, Object> pData = (Map<String, Object>) dataSnapshot.getValue();
                     tmp_list.add(getPatientFullName(pData));
                 }
+
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
 
@@ -313,9 +317,9 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     //Returning patient full names from database
-    public String getPatientFullName(Map<String, Object> map){
-        String name = (String)map.get("name");
-        String surname = (String)map.get("surname");
+    public String getPatientFullName(Map<String, Object> map) {
+        String name = (String) map.get("name");
+        String surname = (String) map.get("surname");
         return name + " " + surname;
     }
 
@@ -327,17 +331,16 @@ public class DrawerActivity extends AppCompatActivity
     ValueEventListener mListener;
 
     @Override
-    public void isPatient(String tmp_email){
+    public void isPatient(String tmp_email) {
         addPatientEmail = tmp_email.replace(".", "");
         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
                 + addPatientEmail);
         firebase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(exists(dataSnapshot)){
+                if (exists(dataSnapshot)) {
                     checkPatient();
-                }
-                else {
+                } else {
                     patientDoesNotExistError();
                 }
             }
@@ -350,7 +353,7 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     //Method for checking whether there is a patient already added for doctor
-    public void checkPatient(){
+    public void checkPatient() {
         String doc_key = email.replace(".", "");
         addPatFirebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
                 + doc_key + "/patients/"
@@ -358,10 +361,9 @@ public class DrawerActivity extends AppCompatActivity
         mListener = addPatFirebase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (exists(dataSnapshot)){
+                if (exists(dataSnapshot)) {
                     patientAlreadyAddedError();
-                }
-                else {
+                } else {
                     addPatient(addPatientEmail);
                     patientAdded();
                 }
@@ -391,18 +393,19 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     //Method returning is there such a patient added or not
-    public boolean exists(DataSnapshot dataSnapshot){
+    public boolean exists(DataSnapshot dataSnapshot) {
         return dataSnapshot.getValue() != null;
     }
 
-    public void patientAlreadyAddedError(){
+    public void patientAlreadyAddedError() {
         Toast.makeText(getBaseContext(), "Patient is already added!", Toast.LENGTH_SHORT).show();
     }
 
-    public void patientDoesNotExistError(){
+    public void patientDoesNotExistError() {
         Toast.makeText(getBaseContext(), "Patient does not exist!", Toast.LENGTH_SHORT).show();
     }
-    public void patientAdded(){
+
+    public void patientAdded() {
         addPatFirebase.removeEventListener(mListener);
         Toast.makeText(getBaseContext(), "Patient added!", Toast.LENGTH_SHORT).show();
     }
@@ -432,7 +435,7 @@ public class DrawerActivity extends AppCompatActivity
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String patient = (String) dataSnapshot.getValue();
                 Log.v("ADDING PATIENT TO LIST", patient);
-                if(!doctorPatients.contains(patient)){
+                if (!doctorPatients.contains(patient)) {
                     doctorPatients.add(patient);
                 }
                 adapter.notifyDataSetChanged();
@@ -479,10 +482,9 @@ public class DrawerActivity extends AppCompatActivity
         precpetListener = preceptFirebase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(exists(dataSnapshot)){
+                if (exists(dataSnapshot)) {
                     preceptExistsError();
-                }
-                else{
+                } else {
                     preceptFirebase.setValue(precept);
                     preceptAdded();
                 }
@@ -495,12 +497,12 @@ public class DrawerActivity extends AppCompatActivity
         });
     }
 
-    public void preceptExistsError(){
+    public void preceptExistsError() {
         preceptFirebase.removeEventListener(precpetListener);
         Toast.makeText(getBaseContext(), "Precept for patient already added!", Toast.LENGTH_SHORT).show();
     }
 
-    public void preceptAdded(){
+    public void preceptAdded() {
         preceptFirebase.removeEventListener(precpetListener);
         Toast.makeText(getBaseContext(), "Precept added!", Toast.LENGTH_SHORT).show();
     }
@@ -553,7 +555,7 @@ public class DrawerActivity extends AppCompatActivity
 //    }
 
     @Override
-    public void populateSpinner(Spinner spinner){
+    public void populateSpinner(Spinner spinner) {
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
@@ -585,8 +587,97 @@ public class DrawerActivity extends AppCompatActivity
                 .show();
     }
 
-    /*////////////////////////////////////////////////////////////////
-                      METHODS FOR ASSIGNING PRECEPT
-    ////////////////////////////////////////////////////////////////*/
+    /*/////////////////////////////////////////////////////////////////////////
+                      METHODS FOR SHOWING PRECEPT FOR PATIENT
+    /////////////////////////////////////////////////////////////////////////*/
 
+    public static boolean isNotEmptyString(final String string) {
+//        return !Strings.isNullOrEmpty(string) && !string.trim().isEmpty();
+        return string != null && !string.isEmpty() && !string.trim().isEmpty();
+    }
+
+    @Override
+    public void isPrecept(final View view) {
+        String no_precept = "no_precept";
+        String no_doctor = "no_doctor";
+        Log.v("DOC_KEY", doctor_key);
+        if (!doctor_key.equals(no_doctor)) {
+            Firebase docFirebas = new Firebase("https://care-connect.firebaseio.com/doctors/" + doctor_key);
+            docFirebas.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Map<String, Long> pData = (Map<String, Long>) dataSnapshot.getValue();
+                    populatePreceptDoc(pData, view);
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        } else {
+            noDoctor();
+            return;
+        }
+
+        Log.v("PRECEPT", precept);
+//        if (precept.trim().equals(no_precept.trim())) {
+        if (!precept.equals(no_precept)) {
+            String pat_key = email.replace(".", "");
+            Firebase patFirebase = new Firebase("https://care-connect.firebaseio.com/patients/" + pat_key + "/precept");
+            patFirebase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Map<String, Long> pData = (Map<String, Long>) dataSnapshot.getValue();
+                    populatePreceptInfo(pData, view);
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+
+        } else {
+            populatePreceptError();
+        }
+    }
+
+
+    private void populatePreceptDoc(Map<String, Long> map, View view) {
+        String fullName = String.valueOf(map.get("name")) + " " + String.valueOf(map.get("surname"));
+        String doc_phone = String.valueOf(map.get("phone_number"));
+
+
+        TextView nameview = (TextView) view.findViewById(R.id.pac_precept_doc_name);
+        TextView phoneView = (TextView) view.findViewById(R.id.pac_precept_doc_nr);
+
+        nameview.setText(fullName);
+        phoneView.setText(doc_phone);
+    }
+
+    private void populatePreceptInfo(Map<String, Long> map, View view) {
+        String o_angle = String.valueOf(map.get("optimal_angle"));
+        String m_angle = String.valueOf(map.get("maximal_angle"));
+        String duration = String.valueOf(map.get("duration"));
+        String frequency = String.valueOf(map.get("frequency"));
+
+        TextView oAngleView = (TextView) view.findViewById(R.id.pac_precept_optimal);
+        TextView mAngleView = (TextView) view.findViewById(R.id.pac_precept_maximal);
+        TextView durationView = (TextView) view.findViewById(R.id.pac_precept_duration);
+        TextView frequencyView = (TextView) view.findViewById(R.id.pac_precept_frequency);
+
+        oAngleView.setText(o_angle);
+        mAngleView.setText(m_angle);
+        durationView.setText(duration);
+        frequencyView.setText(frequency);
+    }
+
+    private void populatePreceptError() {
+        Toast.makeText(getBaseContext(), "No precept assigned!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void noDoctor() {
+        Toast.makeText(getBaseContext(), "No doctor!", Toast.LENGTH_SHORT).show();
+    }
 }

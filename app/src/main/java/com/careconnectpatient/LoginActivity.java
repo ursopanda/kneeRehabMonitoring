@@ -473,6 +473,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             String email = (String)map.get("email");
             String phone = (String)map.get("phone_number");
 
+            boolean has_doctor = map.containsKey("doctor_key");
+            boolean has_precept = map.containsKey("precept");
+
             SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("patient_email", email);
@@ -480,6 +483,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             editor.putString("patient_surname", surname);
             editor.putString("patient_gender", gender);
             editor.putString("patient_phone", phone);
+            if(has_doctor){
+                String doc_key = String.valueOf(map.get("doctor_key"));
+                editor.putString("doctor_key", doc_key);
+            }
+            if(has_precept){
+                String precept = String.valueOf(map.get("precept"));
+                editor.putString("precept", precept);
+            }
             editor.apply();
         }
 

@@ -1,6 +1,7 @@
 package Drawer_fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import com.careconnectpatient.R;
  */
 public class PreceptFragment extends Fragment {
 
+    preceptListener mCommunicator;
+
     public PreceptFragment() {
         // Required empty public constructor
     }
@@ -22,8 +25,29 @@ public class PreceptFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getActivity().setTitle("Precept");
+        View view = inflater.inflate(R.layout.fragment_precept, container, false);
+        mCommunicator.isPrecept(view);
+        return view;
+    }
 
-        return inflater.inflate(R.layout.fragment_precept, container, false);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof preceptListener) {
+            mCommunicator = (preceptListener) context;
+        } else {
+            throw new RuntimeException(context.toString());
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCommunicator = null;
+    }
+
+    public interface preceptListener{
+        void isPrecept(View view);
     }
 
 }

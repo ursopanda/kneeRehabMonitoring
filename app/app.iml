@@ -166,6 +166,7 @@
     <orderEntry type="library" exported="" name="firebase-database-9.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-tagmanager-api-9.0.0" level="project" />
     <orderEntry type="library" exported="" name="firebase-storage-9.0.0" level="project" />
+    <orderEntry type="library" exported="" name="commons-lang3-3.4" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.4.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-iid-9.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-drive-9.0.0" level="project" />

@@ -42,4 +42,5 @@ dependencies {
     compile 'com.firebaseui:firebase-ui:0.3.1'
     compile 'com.google.android.gms:play-services:9.0.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile files('D:/Desktop/Development/commons-lang3-3.4/commons-lang3-3.4.jar')
 }

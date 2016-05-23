@@ -26,6 +26,7 @@ public class UserPickActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
         editor.putString("user_type", PAT);
         editor.apply();
 
