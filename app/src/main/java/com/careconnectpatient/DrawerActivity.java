@@ -385,6 +385,9 @@ public class DrawerActivity extends AppCompatActivity
                 + doc_key
                 + "/patients/" + pat_key);
         firebase.setValue(pat_key);
+        //Assigning doc_key to patient
+        Firebase patFirebase = new Firebase("https://care-connect.firebaseio.com/patients/" + pat_key + "/doctor_key");
+        patFirebase.setValue(doc_key);
     }
 
     //Method returning is there such a patient added or not
@@ -582,5 +585,8 @@ public class DrawerActivity extends AppCompatActivity
                 .show();
     }
 
+    /*////////////////////////////////////////////////////////////////
+                      METHODS FOR ASSIGNING PRECEPT
+    ////////////////////////////////////////////////////////////////*/
 
 }

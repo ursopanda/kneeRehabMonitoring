@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,13 +66,57 @@ public class PreceptAssignFragment extends Fragment implements View.OnClickListe
                 EditText mDurationView = (EditText) getView().findViewById(R.id.precept_duration);
                 EditText mFrequencyView = (EditText) getView().findViewById(R.id.precept_frequency);
 
-                int o_angle = Integer.parseInt(mOptAngleView.getText().toString());
-                int m_angle = Integer.parseInt(mMaxAngleView.getText().toString());
-                int duration = Integer.parseInt(mDurationView.getText().toString());
-                int frequency = Integer.parseInt(mFrequencyView.getText().toString());
+                int o_angle = 0;
+                int m_angle = 0;
+                int duration = 0;
+                int frequency = 0;
+                boolean cancel = false;
+                View focusView = null;
 
-                mCommunicator.assignPrecept(patient, o_angle, m_angle, duration, frequency);
+                if(!TextUtils.isEmpty(mOptAngleView.getText())) {
+                    o_angle = Integer.parseInt(mOptAngleView.getText().toString());
+                }
+                else {
+                    cancel = true;
+                    mOptAngleView.setError(getString(R.string.error_field_required));
+                    focusView = mOptAngleView;
+                }
+
+                if(!TextUtils.isEmpty(mMaxAngleView.getText())) {
+                    m_angle = Integer.parseInt(mMaxAngleView.getText().toString());
+                }
+                else{
+                    cancel = true;
+                    mMaxAngleView.setError(getString(R.string.error_field_required));
+                    focusView = mMaxAngleView;
+                }
+
+                if(!TextUtils.isEmpty(mDurationView.getText())) {
+                    duration = Integer.parseInt(mDurationView.getText().toString());
+                }
+                else{
+                    cancel = true;
+                    mDurationView.setError(getString(R.string.error_field_required));
+                    focusView = mDurationView;
+                }
+
+                if(!TextUtils.isEmpty(mFrequencyView.getText())) {
+                    frequency = Integer.parseInt(mFrequencyView.getText().toString());
+                }
+                else{
+                    cancel = true;
+                    mFrequencyView.setError(getString(R.string.error_field_required));
+                    focusView = mFrequencyView;
+                }
+
+                if(cancel){
+                    focusView.requestFocus();
+                }
+                else{
+                    mCommunicator.assignPrecept(patient, o_angle, m_angle, duration, frequency);
+                }
                 break;
+
             case R.id.remove_precept_button:
                 mCommunicator.removeAssignment(patient, context);
                 break;
