@@ -59,4 +59,11 @@
     <string name="service">Service</string>
     <string name="add_password_title">Add Password</string>
     <string name="add">Add</string>
+
+    <!--Timer strings-->
+    <string name="enter_minutes">Minutes!</string>
+    <string name="start_timer">Start Timer</string>
+    <string name="stop_timer">Stop Timer</string>
+    <string name="reset_timer">Reset Timer</string>
+    <string name="timer">00:00:00</string>
 </resources>

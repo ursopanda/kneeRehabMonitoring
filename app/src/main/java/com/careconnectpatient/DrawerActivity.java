@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import Drawer_fragments.AddPatientFragment;
 import Drawer_fragments.BluetoothFragment;
@@ -38,11 +42,13 @@ import Drawer_fragments.PreceptAssignFragment;
 import Drawer_fragments.PreceptFragment;
 import Drawer_fragments.RehabFragment;
 import database.Precept;
+import database.RehabSession;
 
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         AddPatientFragment.addPatientListener, PatientListFragment.patientListListener,
-        PreceptAssignFragment.preceptAssignListener, PreceptFragment.preceptListener {
+        PreceptAssignFragment.preceptAssignListener, PreceptFragment.preceptListener,
+        RehabFragment.rehabListener {
 
     NavigationView navigationView = null;
     Toolbar toolbar = null;
@@ -52,6 +58,7 @@ public class DrawerActivity extends AppCompatActivity
     String addPatientEmail;
     String doctor_key;
     String precept;
+    int duration_minutes = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +87,7 @@ public class DrawerActivity extends AppCompatActivity
         switch (user_type) {
             case "patient":
                 //Set the initial (first) fragment for patient
-                RehabFragment patientInitialFragment = new RehabFragment();
+                PreceptFragment patientInitialFragment = new PreceptFragment();
                 android.support.v4.app.FragmentTransaction patientFragmentTransaction =
                         getSupportFragmentManager().beginTransaction();
                 patientFragmentTransaction.replace(R.id.fragment_container, patientInitialFragment);
@@ -661,6 +668,7 @@ public class DrawerActivity extends AppCompatActivity
         String m_angle = String.valueOf(map.get("maximal_angle"));
         String duration = String.valueOf(map.get("duration"));
         String frequency = String.valueOf(map.get("frequency"));
+        duration_minutes = Integer.parseInt(duration);
 
         TextView oAngleView = (TextView) view.findViewById(R.id.pac_precept_optimal);
         TextView mAngleView = (TextView) view.findViewById(R.id.pac_precept_maximal);
@@ -671,6 +679,7 @@ public class DrawerActivity extends AppCompatActivity
         mAngleView.setText(m_angle);
         durationView.setText(duration);
         frequencyView.setText(frequency);
+
     }
 
     private void populatePreceptError() {
@@ -679,5 +688,135 @@ public class DrawerActivity extends AppCompatActivity
 
     private void noDoctor() {
         Toast.makeText(getBaseContext(), "No doctor!", Toast.LENGTH_SHORT).show();
+    }
+
+    /*////////////////////////////////////////////////////////////////
+                      METHODS FOR REHAB FRAGMENT
+    ////////////////////////////////////////////////////////////////*/
+
+    //Global variable for count down timer
+    CountDownTimer countDownTimer;
+    long millisLeft;
+    String rehab_duration;
+    //Converting duration minutes to milliseconds
+    long full_duration_millis;
+    String rehab_comment;
+    @Override
+    public void timer(final View view) {
+        full_duration_millis = TimeUnit.MINUTES.toMillis(duration_minutes);
+        final Button startButton = (Button) view.findViewById(R.id.start_button);
+        final Button stopButton = (Button) view.findViewById(R.id.stop_button);
+        final Button finishButton = (Button) view.findViewById(R.id.finish_button);
+        final Button resetButton = (Button) view.findViewById(R.id.reset_button);
+        final EditText comment = (EditText) view.findViewById(R.id.rehab_comment);
+        comment.setFocusableInTouchMode(false);
+        resetButton.setEnabled(false);
+        finishButton.setEnabled(false);
+        stopButton.setEnabled(false);
+        //Setting full duration TextView 00:00:00 to patients assigned one
+        final String full_duration = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(full_duration_millis),
+                TimeUnit.MILLISECONDS.toMinutes(full_duration_millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(full_duration_millis)),
+                TimeUnit.MILLISECONDS.toSeconds(full_duration_millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(full_duration_millis)));
+
+        final TextView countdownTimerText = (TextView) view.findViewById(R.id.countdownText);
+        countdownTimerText.setText(full_duration);
+
+        if(duration_minutes != 0){
+            startButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startButton.setEnabled(false);
+                    resetButton.setEnabled(false);
+                    finishButton.setEnabled(false);
+                    stopButton.setEnabled(true);
+                    startTimer(full_duration_millis, countdownTimerText);
+                }
+            });
+
+            stopButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    long time_spent = full_duration_millis - millisLeft;
+                    rehab_duration = String.format("%02d min, %02d sec",
+                            TimeUnit.MILLISECONDS.toMinutes(time_spent),
+                            TimeUnit.MILLISECONDS.toSeconds(time_spent) -
+                                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time_spent))
+                    );
+                    Log.v("REHAB DURATION", rehab_duration);
+                    comment.setFocusableInTouchMode(true);
+                    resetButton.setEnabled(true);
+                    finishButton.setEnabled(true);
+                    countDownTimer.cancel();
+                }
+            });
+
+            //On click listener for reset button
+            resetButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    millisLeft = 0;
+                    comment.setText("");
+                    countdownTimerText.setText(full_duration);
+                    startButton.setEnabled(true);
+                    finishButton.setEnabled(false);
+                }
+            });
+        }
+        else{
+            //No precept found for patient
+            //Disables all buttons nad throws Toast message
+            resetButton.setEnabled(false);
+            startButton.setEnabled(false);
+            stopButton.setEnabled(false);
+            finishButton.setEnabled(false);
+            populatePreceptError();
+        }
+    }
+
+    public void startTimer(long millis, final TextView timerText){
+        countDownTimer = new CountDownTimer(millis + 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+                timerText.setText(hms);
+                millisLeft = millisUntilFinished;
+                Log.v("Millis left", String.valueOf(millisLeft));
+            }
+
+            @Override
+            public void onFinish() {
+                timerText.setText("TIME'S UP!!");
+            }
+        }.start();
+    }
+
+    @Override
+    public void finishRehab(Context context) {
+        final EditText comment = (EditText) findViewById(R.id.rehab_comment);
+        rehab_comment = comment.getText().toString();
+        Log.v("REHAB COMMENT", rehab_comment);
+
+        new AlertDialog.Builder(context)
+                .setTitle("Finish Rehab Session")
+                .setMessage("Do you want to finish your rehab session?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        RehabSession session = new RehabSession(rehab_comment, rehab_duration);
+                        String patient_key = email.replace(".", "");
+                        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
+                        + patient_key + "/rehab");
+                        firebase.push().setValue(session);
+                        Toast.makeText(getBaseContext(), "Rehab session saved!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getBaseContext(), "Rehab session not saved!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_input_add)
+                .show();
     }
 }

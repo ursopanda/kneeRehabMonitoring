@@ -21,7 +21,6 @@ import com.careconnectpatient.R;
 public class PreceptAssignFragment extends Fragment implements View.OnClickListener {
 
     preceptAssignListener mCommunicator;
-    View.OnClickListener removeListener;
 
     public PreceptAssignFragment() {
         // Required empty public constructor
@@ -46,9 +45,6 @@ public class PreceptAssignFragment extends Fragment implements View.OnClickListe
         mRemoveButton.setOnClickListener(this);
     }
 
-    public View.OnClickListener getRemoveListener() {
-        return removeListener;
-    }
 
     //Override method from View.OnClickListener
     @Override

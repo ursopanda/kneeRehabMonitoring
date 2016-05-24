@@ -5,12 +5,135 @@
     tools:context="Drawer_fragments.RehabFragment">
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Rehab session View"
-        android:id="@+id/rehab_text_view"
-        android:layout_gravity="center" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right|top">
+
+        <Button
+            android:id="@+id/start_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:padding="10dp"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:text="Start"
+            android:layout_marginTop="98dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/stop_button" />
+
+        <Button
+            android:id="@+id/stop_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:text="stop"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginEnd="52dp"
+            android:layout_below="@+id/start_button"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/countdownText"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal|bottom"
+            android:textSize="30sp"
+            android:text="@string/timer"
+            android:textStyle="bold"
+            android:layout_marginStart="43dp"
+            android:layout_above="@+id/stop_button"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:id="@+id/finish_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:text="finish"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/stop_button"
+            android:layout_marginBottom="31dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Duration"
+            android:id="@+id/textView8"
+            android:layout_above="@+id/countdownText"
+            android:layout_alignStart="@+id/countdownText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Knee angle"
+            android:id="@+id/textView10"
+            android:layout_below="@+id/stop_button"
+            android:layout_alignStart="@+id/countdownText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/knee_angle_text"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal|bottom"
+            android:textSize="30sp"
+            android:text="00"
+            android:textStyle="bold"
+            android:layout_below="@+id/textView10"
+            android:layout_alignEnd="@+id/textView10" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/imageView2"
+            android:src="@drawable/angle_sign"
+            android:layout_alignBottom="@+id/knee_angle_text"
+            android:layout_toStartOf="@+id/knee_angle_text" />
+
+        <Button
+            android:id="@+id/reset_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:text="reset"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_alignTop="@+id/finish_button"
+            android:layout_alignStart="@+id/textView10" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Comments"
+            android:id="@+id/textView12"
+            android:layout_below="@+id/knee_angle_text"
+            android:layout_alignStart="@+id/textView10"
+            android:layout_marginTop="49dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/rehab_comment"
+            android:layout_below="@+id/textView12"
+            android:layout_alignStart="@+id/textView12"
+            android:layout_alignEnd="@+id/finish_button" />
+
+
+    </RelativeLayout>
+
 
 </FrameLayout>
