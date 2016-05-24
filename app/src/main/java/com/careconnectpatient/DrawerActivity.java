@@ -30,7 +30,9 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -796,6 +798,9 @@ public class DrawerActivity extends AppCompatActivity
     public void finishRehab(Context context) {
         final EditText comment = (EditText) findViewById(R.id.rehab_comment);
         rehab_comment = comment.getText().toString();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        final String strDate = sdf.format(new Date());
+        Log.v("REHAB DATE", strDate);
         Log.v("REHAB COMMENT", rehab_comment);
 
         new AlertDialog.Builder(context)
@@ -803,7 +808,7 @@ public class DrawerActivity extends AppCompatActivity
                 .setMessage("Do you want to finish your rehab session?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        RehabSession session = new RehabSession(rehab_comment, rehab_duration);
+                        RehabSession session = new RehabSession(rehab_comment, strDate, rehab_duration);
                         String patient_key = email.replace(".", "");
                         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
                         + patient_key + "/rehab");

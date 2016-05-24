@@ -19,16 +19,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="21ecf038-3596-4546-b419-fa0d30ae34ec" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/angle_sign.png" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/TestFragment.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_test.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/PreceptAssignFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/PreceptAssignFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/RehabFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/RehabFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/database/RehabSession.java" afterPath="$PROJECT_DIR$/app/src/main/java/database/RehabSession.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_rehab.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_rehab.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
     </list>
     <ignored path="Development.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -72,33 +65,33 @@
       <file leaf-file-name="DrawerActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.46126762">
-              <caret line="809" column="58" selection-start-line="809" selection-start-column="58" selection-end-line="809" selection-end-column="58" />
+            <state vertical-scroll-proportion="0.82042253">
+              <caret line="827" column="0" selection-start-line="827" selection-start-column="0" selection-end-line="827" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2602#2633#0" expanded="true" />
-                <element signature="e#2635#2667#0" expanded="true" />
-                <element signature="e#29805#30214#0" expanded="true" />
-                <element signature="e#30213#30214#0" expanded="true" />
-                <element signature="e#30260#31082#0" expanded="true" />
-                <element signature="e#31081#31082#0" expanded="true" />
-                <element signature="e#31178#31552#0" expanded="true" />
-                <element signature="e#31551#31552#0" expanded="true" />
-                <element signature="e#32782#32783#0" expanded="true" />
-                <element signature="e#32846#32847#0" expanded="true" />
-                <element signature="e#33336#33981#0" expanded="true" />
-                <element signature="e#33980#33981#0" expanded="true" />
-                <element signature="e#34039#34308#0" expanded="true" />
-                <element signature="e#34307#34308#0" expanded="true" />
-                <marker date="1464090950777" expanded="true" signature="12525:12964" placeholder="..." />
-                <marker date="1464090950777" expanded="false" signature="13685:13784" placeholder="..." />
-                <marker date="1464090950777" expanded="false" signature="15790:15894" placeholder="..." />
-                <marker date="1464090950777" expanded="true" signature="18622:19275" placeholder="..." />
-                <marker date="1464090950777" expanded="true" signature="18737:19275" placeholder="..." />
-                <marker date="1464090950777" expanded="false" signature="20900:22529" placeholder="..." />
-                <marker date="1464090950777" expanded="false" signature="21915:22378" placeholder="..." />
-                <marker date="1464090950777" expanded="true" signature="21917:22378" placeholder="..." />
-                <marker date="1464090950777" expanded="true" signature="21924:22378" placeholder="..." />
+                <element signature="e#2660#2691#0" expanded="true" />
+                <element signature="e#2693#2725#0" expanded="true" />
+                <element signature="e#29863#30272#0" expanded="true" />
+                <element signature="e#30271#30272#0" expanded="true" />
+                <element signature="e#30318#31140#0" expanded="true" />
+                <element signature="e#31139#31140#0" expanded="true" />
+                <element signature="e#31236#31610#0" expanded="true" />
+                <element signature="e#31609#31610#0" expanded="true" />
+                <element signature="e#32840#32841#0" expanded="true" />
+                <element signature="e#32904#32905#0" expanded="true" />
+                <element signature="e#33563#34217#0" expanded="true" />
+                <element signature="e#34216#34217#0" expanded="true" />
+                <element signature="e#34275#34544#0" expanded="true" />
+                <element signature="e#34543#34544#0" expanded="true" />
+                <marker date="1464091958924" expanded="true" signature="12583:13022" placeholder="..." />
+                <marker date="1464091958924" expanded="false" signature="13743:13842" placeholder="..." />
+                <marker date="1464091958924" expanded="false" signature="15848:15952" placeholder="..." />
+                <marker date="1464091958924" expanded="true" signature="18680:19333" placeholder="..." />
+                <marker date="1464091958924" expanded="true" signature="18795:19333" placeholder="..." />
+                <marker date="1464091958924" expanded="false" signature="20958:22587" placeholder="..." />
+                <marker date="1464091958924" expanded="false" signature="21973:22436" placeholder="..." />
+                <marker date="1464091958924" expanded="true" signature="21975:22436" placeholder="..." />
+                <marker date="1464091958924" expanded="true" signature="21982:22436" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -108,8 +101,11 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/database/RehabSession.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="58" selection-start-line="20" selection-start-column="58" selection-end-line="20" selection-end-column="58" />
-              <folding />
+              <caret line="15" column="63" selection-start-line="15" selection-start-column="63" selection-end-line="15" selection-end-column="63" />
+              <folding>
+                <element signature="e#985#986#0" expanded="true" />
+                <element signature="e#1015#1016#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -2431,8 +2427,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/PreceptAssignFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/RehabFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_rehab.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/database/RehabSession.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/database/RehabSession.java" />
       </list>
     </option>
   </component>
@@ -2964,7 +2960,13 @@
       <option name="project" value="LOCAL" />
       <updated>1464003039700</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Created rehab session, saves information to database.">
+      <created>1464091279842</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1464091279842</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -3017,7 +3019,8 @@
     <MESSAGE value="Precept removing process created with alert dialogue." />
     <MESSAGE value="Precept adding validation and patient doc_key assignment added." />
     <MESSAGE value="Precept showing to patient with error handling." />
-    <option name="LAST_COMMIT_MESSAGE" value="Precept showing to patient with error handling." />
+    <MESSAGE value="Created rehab session, saves information to database." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created rehab session, saves information to database." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3030,13 +3033,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java</url>
-          <line>731</line>
+          <line>733</line>
           <properties />
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java</url>
-          <line>716</line>
+          <line>718</line>
           <properties />
           <option name="timeStamp" value="38" />
         </line-breakpoint>
@@ -3305,14 +3308,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/Drawer_fragments/RehabFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="42" column="43" selection-start-line="42" selection-start-column="43" selection-end-line="42" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/Drawer_fragments/PreceptAssignFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -3321,43 +3316,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/Drawer_fragments/RehabFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="42" column="43" selection-start-line="42" selection-start-column="43" selection-end-line="42" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/database/RehabSession.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="20" column="58" selection-start-line="20" selection-start-column="58" selection-end-line="20" selection-end-column="58" />
-          <folding />
+          <caret line="15" column="63" selection-start-line="15" selection-start-column="63" selection-end-line="15" selection-end-column="63" />
+          <folding>
+            <element signature="e#985#986#0" expanded="true" />
+            <element signature="e#1015#1016#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46126762">
-          <caret line="809" column="58" selection-start-line="809" selection-start-column="58" selection-end-line="809" selection-end-column="58" />
+        <state vertical-scroll-proportion="0.82042253">
+          <caret line="827" column="0" selection-start-line="827" selection-start-column="0" selection-end-line="827" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2602#2633#0" expanded="true" />
-            <element signature="e#2635#2667#0" expanded="true" />
-            <element signature="e#29805#30214#0" expanded="true" />
-            <element signature="e#30213#30214#0" expanded="true" />
-            <element signature="e#30260#31082#0" expanded="true" />
-            <element signature="e#31081#31082#0" expanded="true" />
-            <element signature="e#31178#31552#0" expanded="true" />
-            <element signature="e#31551#31552#0" expanded="true" />
-            <element signature="e#32782#32783#0" expanded="true" />
-            <element signature="e#32846#32847#0" expanded="true" />
-            <element signature="e#33336#33981#0" expanded="true" />
-            <element signature="e#33980#33981#0" expanded="true" />
-            <element signature="e#34039#34308#0" expanded="true" />
-            <element signature="e#34307#34308#0" expanded="true" />
-            <marker date="1464090950777" expanded="true" signature="12525:12964" placeholder="..." />
-            <marker date="1464090950777" expanded="false" signature="13685:13784" placeholder="..." />
-            <marker date="1464090950777" expanded="false" signature="15790:15894" placeholder="..." />
-            <marker date="1464090950777" expanded="true" signature="18622:19275" placeholder="..." />
-            <marker date="1464090950777" expanded="true" signature="18737:19275" placeholder="..." />
-            <marker date="1464090950777" expanded="false" signature="20900:22529" placeholder="..." />
-            <marker date="1464090950777" expanded="false" signature="21915:22378" placeholder="..." />
-            <marker date="1464090950777" expanded="true" signature="21917:22378" placeholder="..." />
-            <marker date="1464090950777" expanded="true" signature="21924:22378" placeholder="..." />
+            <element signature="e#2660#2691#0" expanded="true" />
+            <element signature="e#2693#2725#0" expanded="true" />
+            <element signature="e#29863#30272#0" expanded="true" />
+            <element signature="e#30271#30272#0" expanded="true" />
+            <element signature="e#30318#31140#0" expanded="true" />
+            <element signature="e#31139#31140#0" expanded="true" />
+            <element signature="e#31236#31610#0" expanded="true" />
+            <element signature="e#31609#31610#0" expanded="true" />
+            <element signature="e#32840#32841#0" expanded="true" />
+            <element signature="e#32904#32905#0" expanded="true" />
+            <element signature="e#33563#34217#0" expanded="true" />
+            <element signature="e#34216#34217#0" expanded="true" />
+            <element signature="e#34275#34544#0" expanded="true" />
+            <element signature="e#34543#34544#0" expanded="true" />
+            <marker date="1464091958924" expanded="true" signature="12583:13022" placeholder="..." />
+            <marker date="1464091958924" expanded="false" signature="13743:13842" placeholder="..." />
+            <marker date="1464091958924" expanded="false" signature="15848:15952" placeholder="..." />
+            <marker date="1464091958924" expanded="true" signature="18680:19333" placeholder="..." />
+            <marker date="1464091958924" expanded="true" signature="18795:19333" placeholder="..." />
+            <marker date="1464091958924" expanded="false" signature="20958:22587" placeholder="..." />
+            <marker date="1464091958924" expanded="false" signature="21973:22436" placeholder="..." />
+            <marker date="1464091958924" expanded="true" signature="21975:22436" placeholder="..." />
+            <marker date="1464091958924" expanded="true" signature="21982:22436" placeholder="..." />
           </folding>
         </state>
       </provider>

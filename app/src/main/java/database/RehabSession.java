@@ -5,6 +5,7 @@ package database;
  */
 public class RehabSession {
 
+    String date;
     String duration;
     int exceeded_max;
     String comment;
@@ -12,19 +13,25 @@ public class RehabSession {
     public RehabSession() {
     }
 
-    public RehabSession(String comment, String duration, int exceeded_max) {
+    public RehabSession(String comment, String date, String duration, int exceeded_max) {
         this.comment = comment;
+        this.date = date;
         this.duration = duration;
         this.exceeded_max = exceeded_max;
     }
 
-    public RehabSession(String comment, String duration) {
+    public RehabSession(String comment, String date, String duration) {
         this.comment = comment;
+        this.date = date;
         this.duration = duration;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public void setDuration(String duration) {
@@ -37,6 +44,10 @@ public class RehabSession {
 
     public String getComment() {
         return comment;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public String getDuration() {
