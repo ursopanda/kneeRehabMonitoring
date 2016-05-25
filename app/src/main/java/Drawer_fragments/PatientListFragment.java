@@ -21,12 +21,6 @@ public class PatientListFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_patient_list, container, false);
         ListView listView = (ListView) view.findViewById(android.R.id.list);
 
-        //FOR TESTING PURPOSES
-//        String[] values = new String[]{"Patient_1", "Patient_2", "Patient_3", "Patient_4"};
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-//                android.R.layout.simple_list_item_1, values);
-//        setListAdapter(adapter);
-
         mCommunicator.populateList(listView);
         return view;
     }

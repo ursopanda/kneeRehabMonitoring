@@ -19,9 +19,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="21ecf038-3596-4546-b419-fa0d30ae34ec" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/line.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/HistoryListAdapter.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/list_divider.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/history_list_item.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/PatientListFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/PatientListFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/database/RehabSession.java" afterPath="$PROJECT_DIR$/app/src/main/java/database/RehabSession.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/LoginActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/LoginActivity.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/HistoryFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/HistoryPatientFragment.java" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_history.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_patient_history.xml" />
     </list>
     <ignored path="Development.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -42,79 +50,59 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="RehabFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/Drawer_fragments/RehabFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="42" column="43" selection-start-line="42" selection-start-column="43" selection-end-line="42" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PreceptAssignFragment.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/Drawer_fragments/PreceptAssignFragment.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="54" column="39" selection-start-line="54" selection-start-column="39" selection-end-line="54" selection-end-column="39" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DrawerActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="DrawerActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.82042253">
-              <caret line="827" column="0" selection-start-line="827" selection-start-column="0" selection-end-line="827" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="841" column="108" selection-start-line="841" selection-start-column="108" selection-end-line="841" selection-end-column="108" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2660#2691#0" expanded="true" />
-                <element signature="e#2693#2725#0" expanded="true" />
-                <element signature="e#29863#30272#0" expanded="true" />
-                <element signature="e#30271#30272#0" expanded="true" />
-                <element signature="e#30318#31140#0" expanded="true" />
-                <element signature="e#31139#31140#0" expanded="true" />
-                <element signature="e#31236#31610#0" expanded="true" />
-                <element signature="e#31609#31610#0" expanded="true" />
-                <element signature="e#32840#32841#0" expanded="true" />
-                <element signature="e#32904#32905#0" expanded="true" />
-                <element signature="e#33563#34217#0" expanded="true" />
-                <element signature="e#34216#34217#0" expanded="true" />
-                <element signature="e#34275#34544#0" expanded="true" />
-                <element signature="e#34543#34544#0" expanded="true" />
-                <marker date="1464091958924" expanded="true" signature="12583:13022" placeholder="..." />
-                <marker date="1464091958924" expanded="false" signature="13743:13842" placeholder="..." />
-                <marker date="1464091958924" expanded="false" signature="15848:15952" placeholder="..." />
-                <marker date="1464091958924" expanded="true" signature="18680:19333" placeholder="..." />
-                <marker date="1464091958924" expanded="true" signature="18795:19333" placeholder="..." />
-                <marker date="1464091958924" expanded="false" signature="20958:22587" placeholder="..." />
-                <marker date="1464091958924" expanded="false" signature="21973:22436" placeholder="..." />
-                <marker date="1464091958924" expanded="true" signature="21975:22436" placeholder="..." />
-                <marker date="1464091958924" expanded="true" signature="21982:22436" placeholder="..." />
+                <element signature="e#2768#2799#0" expanded="true" />
+                <element signature="e#2801#2833#0" expanded="true" />
+                <element signature="e#7135#7565#0" expanded="true" />
+                <element signature="e#7564#7565#0" expanded="true" />
+                <element signature="e#30781#31190#0" expanded="true" />
+                <element signature="e#31189#31190#0" expanded="true" />
+                <element signature="e#31236#32058#0" expanded="true" />
+                <element signature="e#32057#32058#0" expanded="true" />
+                <element signature="e#32154#32528#0" expanded="true" />
+                <element signature="e#32527#32528#0" expanded="true" />
+                <element signature="e#33758#33759#0" expanded="true" />
+                <element signature="e#33822#33823#0" expanded="true" />
+                <element signature="e#34481#35342#0" expanded="true" />
+                <element signature="e#35341#35342#0" expanded="true" />
+                <element signature="e#35400#35669#0" expanded="true" />
+                <element signature="e#35668#35669#0" expanded="true" />
+                <marker date="1464173062482" expanded="true" signature="13501:13940" placeholder="..." />
+                <marker date="1464173062482" expanded="false" signature="14661:14760" placeholder="..." />
+                <marker date="1464173062482" expanded="false" signature="16766:16870" placeholder="..." />
+                <marker date="1464173062482" expanded="true" signature="19598:20251" placeholder="..." />
+                <marker date="1464173062482" expanded="true" signature="19713:20251" placeholder="..." />
+                <marker date="1464173062482" expanded="false" signature="21876:23505" placeholder="..." />
+                <marker date="1464173062482" expanded="false" signature="22891:23354" placeholder="..." />
+                <marker date="1464173062482" expanded="true" signature="22893:23354" placeholder="..." />
+                <marker date="1464173062482" expanded="true" signature="22900:23354" placeholder="..." />
+                <marker date="1464173062482" expanded="false" signature="36745:37185" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RehabSession.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/database/RehabSession.java">
+      <file leaf-file-name="HistoryPatientFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/Drawer_fragments/HistoryPatientFragment.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="15" column="63" selection-start-line="15" selection-start-column="63" selection-end-line="15" selection-end-column="63" />
-              <folding>
-                <element signature="e#985#986#0" expanded="true" />
-                <element signature="e#1015#1016#0" expanded="true" />
-              </folding>
+              <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="fragment_rehab.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_rehab.xml">
+      <file leaf-file-name="fragment_patient_history.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_patient_history.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.2727275">
-              <caret line="121" column="49" selection-start-line="121" selection-start-column="49" selection-end-line="121" selection-end-column="49" />
+            <state vertical-scroll-proportion="0.2651072">
+              <caret line="8" column="42" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -123,7 +111,47 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="history_list_item.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/history_list_item.xml">
+          <provider editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-6.576923">
+              <caret line="62" column="4" selection-start-line="62" selection-start-column="4" selection-end-line="62" selection-end-column="4" />
+              <folding />
+            </state>
+          </provider>
+          <provider selected="true" editor-type-id="android-designer">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="HistoryListAdapter.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/HistoryListAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-12.137931">
+              <caret line="52" column="31" selection-start-line="52" selection-start-column="31" selection-end-line="52" selection-end-column="31" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#626#627#0" expanded="true" />
+                <element signature="e#668#669#0" expanded="true" />
+                <element signature="e#725#726#0" expanded="true" />
+                <element signature="e#774#775#0" expanded="true" />
+                <element signature="e#831#832#0" expanded="true" />
+                <element signature="e#862#863#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="layoutResourceFile_vertical" />
+        <option value="Class" />
+        <option value="resourceFile" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -2423,12 +2451,20 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_precept.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/UserPickActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/LoginActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/PreceptAssignFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/RehabFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_rehab.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/database/RehabSession.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/LoginActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/PatientListFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/Drawer_fragments/HistoryPatientFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/HistoryListAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_patient_list.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/drawable/list_divider.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/history_list_item.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_patient_history.xml" />
       </list>
     </option>
   </component>
@@ -2519,6 +2555,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="layout" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Development" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="drawable" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2966,7 +3020,13 @@
       <option name="project" value="LOCAL" />
       <updated>1464091279842</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Added datime to rehab session">
+      <created>1464092172643</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1464092172643</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2980,9 +3040,9 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.57214767" sideWeight="0.5045593" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.7181208" sideWeight="0.49544072" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32826748" sideWeight="0.4955947" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32826748" sideWeight="0.4955947" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32819384" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32718122" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290735" sideWeight="0.4968254" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -3020,7 +3080,8 @@
     <MESSAGE value="Precept adding validation and patient doc_key assignment added." />
     <MESSAGE value="Precept showing to patient with error handling." />
     <MESSAGE value="Created rehab session, saves information to database." />
-    <option name="LAST_COMMIT_MESSAGE" value="Created rehab session, saves information to database." />
+    <MESSAGE value="Added datime to rehab session" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added datime to rehab session" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -3033,18 +3094,30 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java</url>
-          <line>733</line>
+          <line>755</line>
           <properties />
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java</url>
-          <line>718</line>
+          <line>740</line>
           <properties />
           <option name="timeStamp" value="38" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java</url>
+          <line>905</line>
+          <properties />
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java</url>
+          <line>894</line>
+          <properties />
+          <option name="timeStamp" value="40" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="39" />
+      <option name="time" value="41" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="app">
@@ -3122,25 +3195,6 @@
           <folding>
             <element signature="e#19920#20032#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-23/android/os/Handler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-          <folding>
-            <element signature="e#29660#29661#0" expanded="false" />
-            <element signature="e#29698#29699#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-23/android/os/Looper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="136" column="0" selection-start-line="136" selection-start-column="0" selection-end-line="136" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -3287,16 +3341,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/LoginActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36443663">
-          <caret line="489" column="0" selection-start-line="489" selection-start-column="0" selection-end-line="489" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_rehab.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-5.2727275">
@@ -3308,14 +3352,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/Drawer_fragments/PreceptAssignFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="54" column="39" selection-start-line="54" selection-start-column="39" selection-end-line="54" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/Drawer_fragments/RehabFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -3324,48 +3360,225 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/database/RehabSession.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.4615383">
+          <caret line="39" column="56" selection-start-line="39" selection-start-column="56" selection-end-line="39" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/Drawer_fragments/PreceptAssignFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="15" column="63" selection-start-line="15" selection-start-column="63" selection-end-line="15" selection-end-column="63" />
+          <caret line="54" column="39" selection-start-line="54" selection-start-column="39" selection-end-line="54" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/Drawer_fragments/PatientListFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="21" column="74" selection-start-line="21" selection-start-column="70" selection-end-line="21" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/database/RehabSession.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.29929578">
+          <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-23/android/content/res/Resources.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.32857144">
+          <caret line="298" column="0" selection-start-line="298" selection-start-column="0" selection-end-line="298" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/LoginActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.366198">
+          <caret line="25" column="21" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-23/android/os/Looper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35951662">
+          <caret line="142" column="0" selection-start-line="142" selection-start-column="0" selection-end-line="142" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-23/android/os/Handler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3323263">
+          <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
           <folding>
-            <element signature="e#985#986#0" expanded="true" />
-            <element signature="e#1015#1016#0" expanded="true" />
+            <element signature="e#29660#29661#0" expanded="false" />
+            <element signature="e#29698#29699#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/app/libs/firebase-client-android-2.5.2.jar!/com/firebase/client/core/view/EventRaiser.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7236842">
+          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding>
+            <element signature="e#931#1355#0" expanded="true" />
+            <element signature="e#1354#1355#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/app/libs/firebase-client-android-2.5.2.jar!/com/firebase/client/core/view/DataEvent.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.52960527">
+          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+          <folding>
+            <element signature="e#1284#1285#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/app/libs/firebase-client-android-2.5.2.jar!/com/firebase/client/core/ChildEventRegistration.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33223686">
+          <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Android/sdk/sources/android-23/android/widget/AbsListView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2346" column="0" selection-start-line="2346" selection-start-column="0" selection-end-line="2346" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.09409594">
+          <caret line="3" column="22" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/color/action_bar_color.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_patient_list.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.49707603">
+          <caret line="15" column="50" selection-start-line="15" selection-start-column="50" selection-end-line="15" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/HistoryListAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.137931">
+          <caret line="52" column="31" selection-start-line="52" selection-start-column="31" selection-end-line="52" selection-end-column="31" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#626#627#0" expanded="true" />
+            <element signature="e#668#669#0" expanded="true" />
+            <element signature="e#725#726#0" expanded="true" />
+            <element signature="e#774#775#0" expanded="true" />
+            <element signature="e#831#832#0" expanded="true" />
+            <element signature="e#862#863#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/Drawer_fragments/HistoryPatientFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="32" column="0" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/careconnectpatient/DrawerActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.82042253">
-          <caret line="827" column="0" selection-start-line="827" selection-start-column="0" selection-end-line="827" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="841" column="108" selection-start-line="841" selection-start-column="108" selection-end-line="841" selection-end-column="108" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2660#2691#0" expanded="true" />
-            <element signature="e#2693#2725#0" expanded="true" />
-            <element signature="e#29863#30272#0" expanded="true" />
-            <element signature="e#30271#30272#0" expanded="true" />
-            <element signature="e#30318#31140#0" expanded="true" />
-            <element signature="e#31139#31140#0" expanded="true" />
-            <element signature="e#31236#31610#0" expanded="true" />
-            <element signature="e#31609#31610#0" expanded="true" />
-            <element signature="e#32840#32841#0" expanded="true" />
-            <element signature="e#32904#32905#0" expanded="true" />
-            <element signature="e#33563#34217#0" expanded="true" />
-            <element signature="e#34216#34217#0" expanded="true" />
-            <element signature="e#34275#34544#0" expanded="true" />
-            <element signature="e#34543#34544#0" expanded="true" />
-            <marker date="1464091958924" expanded="true" signature="12583:13022" placeholder="..." />
-            <marker date="1464091958924" expanded="false" signature="13743:13842" placeholder="..." />
-            <marker date="1464091958924" expanded="false" signature="15848:15952" placeholder="..." />
-            <marker date="1464091958924" expanded="true" signature="18680:19333" placeholder="..." />
-            <marker date="1464091958924" expanded="true" signature="18795:19333" placeholder="..." />
-            <marker date="1464091958924" expanded="false" signature="20958:22587" placeholder="..." />
-            <marker date="1464091958924" expanded="false" signature="21973:22436" placeholder="..." />
-            <marker date="1464091958924" expanded="true" signature="21975:22436" placeholder="..." />
-            <marker date="1464091958924" expanded="true" signature="21982:22436" placeholder="..." />
+            <element signature="e#2768#2799#0" expanded="true" />
+            <element signature="e#2801#2833#0" expanded="true" />
+            <element signature="e#7135#7565#0" expanded="true" />
+            <element signature="e#7564#7565#0" expanded="true" />
+            <element signature="e#30781#31190#0" expanded="true" />
+            <element signature="e#31189#31190#0" expanded="true" />
+            <element signature="e#31236#32058#0" expanded="true" />
+            <element signature="e#32057#32058#0" expanded="true" />
+            <element signature="e#32154#32528#0" expanded="true" />
+            <element signature="e#32527#32528#0" expanded="true" />
+            <element signature="e#33758#33759#0" expanded="true" />
+            <element signature="e#33822#33823#0" expanded="true" />
+            <element signature="e#34481#35342#0" expanded="true" />
+            <element signature="e#35341#35342#0" expanded="true" />
+            <element signature="e#35400#35669#0" expanded="true" />
+            <element signature="e#35668#35669#0" expanded="true" />
+            <marker date="1464173062482" expanded="true" signature="13501:13940" placeholder="..." />
+            <marker date="1464173062482" expanded="false" signature="14661:14760" placeholder="..." />
+            <marker date="1464173062482" expanded="false" signature="16766:16870" placeholder="..." />
+            <marker date="1464173062482" expanded="true" signature="19598:20251" placeholder="..." />
+            <marker date="1464173062482" expanded="true" signature="19713:20251" placeholder="..." />
+            <marker date="1464173062482" expanded="false" signature="21876:23505" placeholder="..." />
+            <marker date="1464173062482" expanded="false" signature="22891:23354" placeholder="..." />
+            <marker date="1464173062482" expanded="true" signature="22893:23354" placeholder="..." />
+            <marker date="1464173062482" expanded="true" signature="22900:23354" placeholder="..." />
+            <marker date="1464173062482" expanded="false" signature="36745:37185" placeholder="..." />
           </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/list_divider.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.18819188">
+          <caret line="6" column="30" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/history_list_item.xml">
+      <provider editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.576923">
+          <caret line="62" column="4" selection-start-line="62" selection-start-column="4" selection-end-line="62" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_patient_history.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2651072">
+          <caret line="8" column="42" selection-start-line="8" selection-start-column="42" selection-end-line="8" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
   </component>

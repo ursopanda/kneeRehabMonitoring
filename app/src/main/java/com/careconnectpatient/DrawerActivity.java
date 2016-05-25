@@ -3,6 +3,7 @@ package com.careconnectpatient;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -33,12 +34,13 @@ import com.firebase.client.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import Drawer_fragments.AddPatientFragment;
 import Drawer_fragments.BluetoothFragment;
-import Drawer_fragments.HistoryFragment;
+import Drawer_fragments.HistoryPatientFragment;
 import Drawer_fragments.PatientListFragment;
 import Drawer_fragments.PreceptAssignFragment;
 import Drawer_fragments.PreceptFragment;
@@ -50,7 +52,7 @@ public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         AddPatientFragment.addPatientListener, PatientListFragment.patientListListener,
         PreceptAssignFragment.preceptAssignListener, PreceptFragment.preceptListener,
-        RehabFragment.rehabListener {
+        RehabFragment.rehabListener, HistoryPatientFragment.patientHistoryListener {
 
     NavigationView navigationView = null;
     Toolbar toolbar = null;
@@ -140,18 +142,6 @@ public class DrawerActivity extends AppCompatActivity
                 break;
             default:
         }
-
-//        //TODO: needs to be redone
-//        //Sending data to RehabFragment
-//        PreceptFragment precept = new PreceptFragment();
-//        Bundle bundle = new Bundle();
-//        bundle.putString("patient_email", email);
-//        precept.setArguments(bundle);
-//        //Sending via callback
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.fragment_container, precept);
-//        transaction.addToBackStack(null);
-//        transaction.commit();
     }
 
     public void setText(String fullName, String email) {
@@ -170,9 +160,41 @@ public class DrawerActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            new AlertDialog.Builder(this)
+                    .setTitle("Exit")
+                    .setMessage("Are you sure you want to exit?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final Context context = getBaseContext();
+                            Intent intent = new Intent(context, StartActivity.class);
+                            startActivity(intent);
+                        }
+
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
         }
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        new AlertDialog.Builder(this)
+//                .setIcon(android.R.drawable.ic_dialog_alert)
+//                .setTitle("Closing Activity")
+//                .setMessage("Are you sure you want to close this activity?")
+//                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+//                {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        finish();
+//                    }
+//
+//                })
+//                .setNegativeButton("No", null)
+//                .show();
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -210,7 +232,7 @@ public class DrawerActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.commit();
         } else if (id == R.id.nav_history) {
-            HistoryFragment fragment = new HistoryFragment();
+            HistoryPatientFragment fragment = new HistoryPatientFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
@@ -808,7 +830,11 @@ public class DrawerActivity extends AppCompatActivity
                 .setMessage("Do you want to finish your rehab session?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        //TODO: add exceeded max
+                        //For testing purposes
+//                        RehabSession session = new RehabSession(rehab_comment, strDate, rehab_duration, 0);
                         RehabSession session = new RehabSession(rehab_comment, strDate, rehab_duration);
+
                         String patient_key = email.replace(".", "");
                         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
                         + patient_key + "/rehab");
@@ -821,7 +847,62 @@ public class DrawerActivity extends AppCompatActivity
                         Toast.makeText(getBaseContext(), "Rehab session not saved!", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setIcon(android.R.drawable.ic_input_add)
                 .show();
+    }
+
+    /*////////////////////////////////////////////////////////////////
+                      METHODS FOR PATIENT HISTORY FRAGMENT
+    ////////////////////////////////////////////////////////////////*/
+    HistoryListAdapter historyAdapter;
+    List<RehabSession> patientHistoryList;
+
+
+    @Override
+    public void populateHistoryList(ListView listview) {
+        patientHistoryList = new ArrayList<>();
+        historyAdapter = new HistoryListAdapter(getApplicationContext(), patientHistoryList);
+        String pat_key = email.replace(".","");
+        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
+                + pat_key + "/rehab");
+        firebase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Map<String, Object> pData = (Map<String, Object>) dataSnapshot.getValue();
+                addSessionToHistory(pData);
+                historyAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        listview.setAdapter(historyAdapter);
+    }
+
+    private void addSessionToHistory(Map<String, Object> map) {
+        String comment = (String) map.get("comment");
+        String date = (String) map.get("date");
+        String duration = (String) map.get("duration");
+//        Long exceeded = (Long) map.get("exceeded_max");
+//        int exceeded_max = Ints.checkedCast(exceeded);
+//        RehabSession rSession = new RehabSession(comment,date,duration,exceeded_max);
+        RehabSession rSession = new RehabSession(comment,date,duration);
+        patientHistoryList.add(rSession);
     }
 }

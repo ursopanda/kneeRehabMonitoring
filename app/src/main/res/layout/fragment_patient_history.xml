@@ -1,0 +1,17 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Drawer_fragments.HistoryPatientFragment">
+
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/patient_history_list"
+        android:layout_gravity="left|top"
+        android:background="#D3D3D3"
+        android:layout_marginTop="60dp"
+        android:divider="@drawable/list_divider"
+        android:dividerHeight="2px"/>
+</FrameLayout>
