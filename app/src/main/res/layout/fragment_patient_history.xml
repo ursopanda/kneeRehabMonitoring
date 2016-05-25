@@ -12,6 +12,8 @@
         android:layout_gravity="left|top"
         android:background="#D3D3D3"
         android:layout_marginTop="60dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:divider="@drawable/list_divider"
         android:dividerHeight="2px"/>
 </FrameLayout>

@@ -2,33 +2,25 @@ package com.careconnectpatient;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -45,8 +37,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static android.Manifest.permission.READ_CONTACTS;
-
 /**
  * A login screen that offers login via email/password.
  */
@@ -56,14 +46,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -83,21 +65,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
-
+        // Set up the login form.
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         if (mEmailSignInButton != null) {
@@ -113,48 +83,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mProgressView = findViewById(R.id.login_progress);
     }
 
-    private void populateAutoComplete() {
-        if (!mayRequestContacts()) {
-            return;
-        }
-
-        getLoaderManager().initLoader(0, null, this);
-    }
-
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
-
-    /**
-     * Callback received when a permissions request has been completed.
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_READ_CONTACTS) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                populateAutoComplete();
-            }
-        }
-    }
 
 
     /**
@@ -163,10 +91,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        final Context context = this;
-        if (mAuthTask != null) {
-            return;
-        }
+//        final Context context = this;
+//        if (mAuthTask != null) {
+//            return;
+//        }
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
@@ -203,7 +131,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             showProgress(true);
             mAuthTask = new UserLoginTask(email, hPass);
-            mAuthTask.execute((Void) null);
         }
     }
 
@@ -224,11 +151,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     /**
      * Shows the progress UI and hides the login form.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -301,21 +224,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
-    private interface ProfileQuery {
-        String[] PROJECTION = {
-                ContactsContract.CommonDataKinds.Email.ADDRESS,
-                ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
-        };
+        private interface ProfileQuery {
+            String[] PROJECTION = {
+                    ContactsContract.CommonDataKinds.Email.ADDRESS,
+                    ContactsContract.CommonDataKinds.Email.IS_PRIMARY,
+            };
 
-        int ADDRESS = 0;
-        int IS_PRIMARY = 1;
+            int ADDRESS = 0;
+            int IS_PRIMARY = 1;
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+
+
+
+    public class UserLoginTask {
 
         private final String mEmail;
         private final String mPassword;
@@ -328,141 +250,119 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
-        }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
+            if (user_type == null){
+                loginFailed();
+            }
 
-            try {
-
-                if (user_type == null){
-                    loginFailed();
-                }
-
-                switch (user_type){
-                    case "patient":
-                        String patient_email_string = mEmail.replace(".", "");
-                        pFirebase = new Firebase("https://care-connect.firebaseio.com/patients/"
-                                + patient_email_string);
-                        pListner = pFirebase.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Map<String, Object> pData = (Map<String, Object>)dataSnapshot.getValue();
+            switch (user_type){
+                case "patient":
+                    String patient_email_string = mEmail.replace(".", "");
+                    pFirebase = new Firebase("https://care-connect.firebaseio.com/patients/"
+                            + patient_email_string);
+                    pListner = pFirebase.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Map<String, Object> pData = (Map<String, Object>)dataSnapshot.getValue();
+                            if(userExists(pData)){
                                 String tPass = (String)pData.get("password");
+                                String tEmail = (String)pData.get("email");
                                 showProgress(true);
-                                tryPatientLogin(tPass);
+                                tryPatientLogin(tPass, tEmail);
                                 sharedPatient(pData);
                             }
-
-                            @Override
-                            public void onCancelled(FirebaseError firebaseError) {
-
+                            else{
+                                noUserError();
                             }
-                        });
-                        break;
-                    case "doctor":
-                        String doctor_email_string = mEmail.replace(".", "");
-                        dFirebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
-                                + doctor_email_string);
-                        dListner = dFirebase.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Map<String, Object> pData = (Map<String, Object>)dataSnapshot.getValue();
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
+                    break;
+                case "doctor":
+                    String doctor_email_string = mEmail.replace(".", "");
+                    dFirebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
+                            + doctor_email_string);
+                    dListner = dFirebase.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Map<String, Object> pData = (Map<String, Object>)dataSnapshot.getValue();
+                            if(userExists(pData)){
                                 String tPass = (String)pData.get("password");
                                 showProgress(true);
                                 tryDoctorLogin(tPass);
                                 sharedDoctor(pData);
                             }
-
-                            @Override
-                            public void onCancelled(FirebaseError firebaseError) {
-
+                            else {
+                                noUserError();
                             }
-                        });
-                        break;
-                    default:
-                }
+                        }
 
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                return false;
-            }
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
 
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                        }
+                    });
+                    break;
+                default:
             }
         }
 
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
+        private void noUserError() {
+            Toast.makeText(getBaseContext(), "Invalid email!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+            startActivity(intent);
         }
 
-        public void tryPatientLogin(String fPass){
+        private boolean userExists(Map<String, Object> pData) {
+            showProgress(true);
+//            ProgressBar progressBar = (ProgressBar)findViewById(R.id.login_progress);
+            return pData != null;
+        }
+
+        public void tryPatientLogin(String fPass, String fEmail){
+
             boolean isLogged = (fPass.matches(mPassword));
 
-            if(isLogged) {
-                runOnUiThread(new Runnable() {
-
-                    public void run() {
-                        //TODO: remove patient event listener
-                        pFirebase.removeEventListener(pListner);
-                        Toast.makeText(getBaseContext(), "Login successful!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            if(isLogged){
+                pFirebase.removeEventListener(pListner);
+                Toast.makeText(getBaseContext(), "Login successful!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getBaseContext(), DrawerActivity.class);
                 startActivity(intent);
             }
             else {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getBaseContext(), "Login failed!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                mEmailView.setText(fEmail);
+                pFirebase.removeEventListener(pListner);
+                Toast.makeText(getBaseContext(), "Invalid password!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                startActivity(intent);
             }
-
-
         }
 
         public void tryDoctorLogin(String fPass){
             boolean isLogged = (fPass.matches(mPassword));
 
-            if(isLogged) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        dFirebase.removeEventListener(dListner);
-                        Toast.makeText(getBaseContext(), "Login successful!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            if(isLogged){
+                dFirebase.removeEventListener(dListner);
+                Toast.makeText(getBaseContext(), "Login successful!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getBaseContext(), DrawerActivity.class);
                 startActivity(intent);
             }
-            else {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        Toast.makeText(getBaseContext(), "Login failed!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+            else{
+                mEmailView.setText(mEmail);
+                pFirebase.removeEventListener(pListner);
+                Toast.makeText(getBaseContext(), "Invalid password!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+                startActivity(intent);
             }
-
-
         }
 
         public void loginFailed(){
             Toast.makeText(getBaseContext(), "Login failed!", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(getBaseContext(), UserPickActivity.class);
+            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
             startActivity(intent);
         }
 
@@ -511,8 +411,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             editor.apply();
         }
     }
-
-
 
     //Back Button
     public void LoginBack(View view) {

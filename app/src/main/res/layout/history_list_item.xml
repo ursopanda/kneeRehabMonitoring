@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Date &amp; time:"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="#6b6b6b"
         android:id="@+id/dateText"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Large Text"
-        android:textColor="#6b6b6b"
+        android:textColor="@color/colorPrimaryDark"
         android:id="@+id/rehab_history_date"
         android:layout_alignBottom="@+id/dateText"
         android:layout_toEndOf="@+id/dateText"
@@ -32,18 +32,18 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Duration:"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="#6b6b6b"
         android:id="@+id/textView14"
-        android:layout_marginTop="20dp"
         android:layout_below="@+id/dateText"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Large "
-        android:textColor="#6b6b6b"
+        android:textColor="@color/colorPrimaryDark"
         android:id="@+id/rehab_history_duration"
         android:layout_alignBottom="@+id/textView14"
         android:layout_toEndOf="@+id/textView14"
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Exceeded max:"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="#6b6b6b"
         android:id="@+id/textView15"
         android:layout_marginStart="22dp"
         android:layout_alignBottom="@+id/rehab_history_duration"
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="0"
-        android:textColor="#6b6b6b"
+        android:textColor="@color/colorPrimaryDark"
         android:id="@+id/rehab_history_exceeded"
         android:layout_marginStart="21dp"
         android:layout_alignBottom="@+id/textView15"
@@ -76,28 +76,21 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Comment:"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="#6b6b6b"
         android:id="@+id/textView17"
         android:layout_below="@+id/textView14"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:textColor="#6b6b6b"
+        android:textColor="@color/colorPrimaryDark"
         android:id="@+id/rehab_history_comment"
         android:layout_alignBottom="@+id/textView17"
         android:layout_alignStart="@+id/rehab_history_duration" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView3"
-        android:src="@drawable/line"
-        android:visibility="gone"
-        android:layout_below="@+id/textView17"
-        android:layout_alignParentStart="true" />
 </RelativeLayout>
