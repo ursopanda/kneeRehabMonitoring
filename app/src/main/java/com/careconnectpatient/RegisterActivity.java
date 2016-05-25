@@ -2,11 +2,9 @@ package com.careconnectpatient;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,19 +17,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import database.Doctor;
 import database.FirebaseHelper;
 import database.Patient;
 
 public class RegisterActivity extends AppCompatActivity {
-
-
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -132,27 +132,13 @@ public class RegisterActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             showProgress(true);
-
-            /*////////////////// FOR TESTING PURPOSES /////////////////////*/
-//            DatabaseHelper db = new DatabaseHelper(getApplicationContext());
-//            Patient patient1 = new Patient(name, surname, email, password, gender);
-//            long patient_id = db.createPatient(patient1);
-//            ArrayList<Patient> allRecords = db.getPatients();
-//            db.close();
-            /*////////////////// FOR TESTING PURPOSES /////////////////////*/
-
             mAuthTask = new UserRegisterTask(name, surname, email, password, gender, phone_number);
-            mAuthTask.execute((Void) null);
-            Toast.makeText(getBaseContext(), "Registration successful!", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(context, LoginActivity.class);
-            startActivity(intent);
         }
     }
 
     /**
      * Shows the progress UI and hides the login form.
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
@@ -185,14 +171,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-//    private boolean isEmailValid(String email) {
-//        Pattern pattern;
-//        Matcher matcher;
-//        final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-//        pattern = Pattern.compile(EMAIL_PATTERN);
-//        matcher = pattern.matcher(email);
-//        return matcher.matches();
-//    }
 
     //Android matching class "Patterns"
     private boolean isEmailValid(String email) {
@@ -211,7 +189,7 @@ public class RegisterActivity extends AppCompatActivity {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserRegisterTask {
 
         private final String mName;
         private final String mSurname;
@@ -219,6 +197,9 @@ public class RegisterActivity extends AppCompatActivity {
         private final String mPassword;
         private final String mGender;
         private final String mPhoneNumber;
+
+        private ValueEventListener patientListener, doctorListener;
+        private Firebase patientFirebase, doctorFirebase;
 
         UserRegisterTask(String name, String surname, String email, String password, String gender, String phone) {
             //Hashing password
@@ -230,84 +211,95 @@ public class RegisterActivity extends AppCompatActivity {
             mPassword = hPass;
             mGender = gender;
             mPhoneNumber = phone;
-        }
 
-        @Override
-            protected Boolean doInBackground(Void... params) {
-            try {
+            String email_string = mEmail.replace(".", "");
+            Log.e("NEW_EMAIL", email_string);
 
-//                DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+            //Getting user type
+            SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
+            String user_type = sharedPreferences.getString("user_type", null);
 
-                String email_string = mEmail.replace(".", "");
-                Log.e("NEW_EMAIL", email_string);
+            String user_key;
 
-                //Firebase implementation
-                FirebaseHelper fb = new FirebaseHelper();
-                Firebase firebase;
+            if (user_type != null) {
+                switch (user_type){
+                    case "patient":
+                        patientFirebase = new Firebase("https://care-connect.firebaseio.com/patients/" + email_string);
+                        patientListener = patientFirebase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Map<String, Object> pData = (Map<String, Object>)dataSnapshot.getValue();
+                                if(userExists(pData)){
+                                    emailExistsError();
+                                }
+                                else{
+                                    addPatient(patientFirebase);
+                                }
+                            }
 
-                //Getting user type
-                SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
-                String user_type = sharedPreferences.getString("user_type", null);
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
 
-                String user_key;
+                            }
+                        });
+                        break;
+                    case "doctor":
+                        doctorFirebase = new Firebase("https://care-connect.firebaseio.com/doctors/" + email_string);
+                        doctorListener = doctorFirebase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Map<String, Object> pData = (Map<String, Object>)dataSnapshot.getValue();
+                                if(userExists(pData)){
+                                    emailExistsError();
+                                }
+                                else{
+                                    addDoctor(doctorFirebase);
+                                }
+                            }
 
-                if (user_type != null) {
-                    switch (user_type){
-                        case "patient":
-                            firebase = new Firebase("https://care-connect.firebaseio.com/patients/" + email_string);
-                            Patient patient = new Patient(mName, mSurname, mEmail, mPassword, mGender, mPhoneNumber);
-                            fb.newPatient(patient, firebase);
-                            user_key = patient.getName();
-                            break;
-                        case "doctor":
-                            firebase = new Firebase("https://care-connect.firebaseio.com/doctors/" + email_string);
-                            Doctor doctor = new Doctor(mName, mSurname, mEmail, mPassword, mPhoneNumber);
-                            fb.newDoctor(doctor, firebase);
-                            user_key = doctor.getName();
-                            break;
-                        default:
-                            user_key = null;
-                    }
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+
+                            }
+                        });
+                        break;
+                    default:
                 }
-                else {
-                    user_key = null;
-                }
-
-//                fb.newPatient(patient, firebase);
-//                String patient_key = patient.getName();
-//                Log.e("PATIENT KEY", fire);
-
-                if (user_key != null){
-                    return true;
-                }
-                else
-                {
-                    Thread.sleep(10);
-                    return false;
-                }
-            } catch (InterruptedException e) {
-                return false;
             }
+
         }
 
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_connection_issue));
-                mPasswordView.requestFocus();
-            }
+        private void emailExistsError() {
+            Toast.makeText(getBaseContext(), "Email address is already registered!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getBaseContext(), RegisterActivity.class);
+            startActivity(intent);
         }
 
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
+        private void addPatient(Firebase firebase) {
+            FirebaseHelper fb = new FirebaseHelper();
+            Patient patient = new Patient(mName, mSurname, mEmail, mPassword, mGender, mPhoneNumber);
+            fb.newPatient(patient, firebase);
+            patientFirebase.removeEventListener(patientListener);
+
+            Toast.makeText(getBaseContext(), "Registration successful!", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+            startActivity(intent);
+        }
+
+        private void addDoctor(Firebase firebase) {
+            doctorFirebase.removeEventListener(doctorListener);
+            FirebaseHelper fb = new FirebaseHelper();
+            Doctor doctor = new Doctor(mName, mSurname, mEmail, mPassword, mPhoneNumber);
+            fb.newDoctor(doctor, firebase);
+            patientFirebase.removeEventListener(patientListener);
+
+            Toast.makeText(getBaseContext(), "Registration successful!", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+            startActivity(intent);
+        }
+
+        private boolean userExists(Map<String, Object> pData) {
+            return pData != null;
         }
     }
 
