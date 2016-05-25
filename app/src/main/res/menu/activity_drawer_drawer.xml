@@ -23,6 +23,11 @@
             android:title="History"
             android:visible="false" />
         <item
+            android:id="@+id/nav_doctor_history"
+            android:icon="@drawable/history_icon"
+            android:title="History"
+            android:visible="false" />
+        <item
             android:id="@+id/nav_pac_precept"
             android:icon="@drawable/precept_icon"
             android:title="Precept"

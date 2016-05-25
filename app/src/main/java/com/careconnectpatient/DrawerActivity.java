@@ -30,6 +30,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.common.primitives.Ints;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 
 import Drawer_fragments.AddPatientFragment;
 import Drawer_fragments.BluetoothFragment;
+import Drawer_fragments.DoctorHistoryFragment;
 import Drawer_fragments.HistoryPatientFragment;
 import Drawer_fragments.PatientListFragment;
 import Drawer_fragments.PreceptAssignFragment;
@@ -52,7 +54,8 @@ public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         AddPatientFragment.addPatientListener, PatientListFragment.patientListListener,
         PreceptAssignFragment.preceptAssignListener, PreceptFragment.preceptListener,
-        RehabFragment.rehabListener, HistoryPatientFragment.patientHistoryListener {
+        RehabFragment.rehabListener, HistoryPatientFragment.patientHistoryListener,
+        DoctorHistoryFragment.DoctorHistoryListener{
 
     NavigationView navigationView = null;
     Toolbar toolbar = null;
@@ -127,6 +130,7 @@ public class DrawerActivity extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_add_patient).setVisible(true);
                 navigationView.getMenu().findItem(R.id.nav_patient_list).setVisible(true);
                 navigationView.getMenu().findItem(R.id.nav_doc_precept).setVisible(true);
+                navigationView.getMenu().findItem(R.id.nav_doctor_history).setVisible(true);
 
                 //Getting doctor info from shared preferences
                 email = sharedPreferences.getString("doctor_email", "default@patient.com");
@@ -257,6 +261,12 @@ public class DrawerActivity extends AppCompatActivity
             fragmentTransaction.commit();
         } else if (id == R.id.nav_doc_precept) {
             PreceptAssignFragment fragment = new PreceptAssignFragment();
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.commit();
+        }else if (id == R.id.nav_doctor_history) {
+            DoctorHistoryFragment fragment = new DoctorHistoryFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
@@ -539,52 +549,6 @@ public class DrawerActivity extends AppCompatActivity
     }
 
 
-//    @Override
-//    public void populateSpinner(Spinner spinner) {
-//        String doc_key = email.replace(".", "");
-//        final ArrayList<String> patients = new ArrayList<>();
-//
-//        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, patients);
-////        final ArrayAdapter<String> finalAdapter = new ArrayAdapter<>(
-////                this,
-////                android.R.layout.simple_spinner_item,
-////                updateArray(patients));
-//
-//        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
-//                + doc_key + "/patients/");
-//
-//        firebase.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                String patient = (String) dataSnapshot.getValue();
-//                patients.add(patient);
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//
-//            }
-//        });
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        spinner.setAdapter(adapter);
-//    }
-
     @Override
     public void populateSpinner(Spinner spinner) {
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -832,8 +796,8 @@ public class DrawerActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int which) {
                         //TODO: add exceeded max
                         //For testing purposes
-//                        RehabSession session = new RehabSession(rehab_comment, strDate, rehab_duration, 0);
-                        RehabSession session = new RehabSession(rehab_comment, strDate, rehab_duration);
+                        RehabSession session = new RehabSession(rehab_comment, strDate, rehab_duration, 0);
+//                        RehabSession session = new RehabSession(rehab_comment, strDate, rehab_duration);
 
                         String patient_key = email.replace(".", "");
                         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
@@ -899,10 +863,63 @@ public class DrawerActivity extends AppCompatActivity
         String comment = (String) map.get("comment");
         String date = (String) map.get("date");
         String duration = (String) map.get("duration");
-//        Long exceeded = (Long) map.get("exceeded_max");
-//        int exceeded_max = Ints.checkedCast(exceeded);
-//        RehabSession rSession = new RehabSession(comment,date,duration,exceeded_max);
-        RehabSession rSession = new RehabSession(comment,date,duration);
+        Long exceeded = (Long) map.get("exceeded_max");
+        int exceeded_max = Ints.checkedCast(exceeded);
+        RehabSession rSession = new RehabSession(comment,date,duration,exceeded_max);
+//        RehabSession rSession = new RehabSession(comment,date,duration);
         patientHistoryList.add(rSession);
+    }
+
+    /*////////////////////////////////////////////////////////////////
+                      METHODS FOR DOCTOR0 HISTORY FRAGMENT
+    ////////////////////////////////////////////////////////////////*/
+
+    @Override
+    public void populateDoctorHistoryList(ListView listview, String patient_key) {
+
+
+        patientHistoryList = new ArrayList<>();
+        historyAdapter = new HistoryListAdapter(getApplicationContext(), patientHistoryList);
+        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
+                + patient_key + "/rehab");
+        firebase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Map<String, Object> pData = (Map<String, Object>) dataSnapshot.getValue();
+                addSessionToHistory(pData);
+                historyAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        listview.setAdapter(historyAdapter);
+    }
+
+    @Override
+    public void populateHistorySpinner(Spinner spinner) {
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                allPatients);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 }

@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="Drawer_fragments.DoctorHistoryFragment">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Select patient"
+        android:layout_gravity="center_horizontal|top"
+        android:id="@+id/textView"
+        android:layout_marginTop="60dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Spinner
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:id="@+id/doctor_history_spinner"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/doctor_history_list"
+        android:layout_below="@+id/doctor_history_spinner"
+        android:layout_centerHorizontal="true"
+        android:divider="@drawable/list_divider"
+        android:dividerHeight="2px" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SHOW"
+        android:id="@+id/doctor_history_button"
+        android:layout_alignTop="@+id/doctor_history_spinner"
+        android:layout_toEndOf="@+id/doctor_history_spinner" />
+</RelativeLayout>

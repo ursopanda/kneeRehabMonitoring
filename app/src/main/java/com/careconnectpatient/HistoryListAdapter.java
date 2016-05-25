@@ -43,13 +43,13 @@ public class HistoryListAdapter extends BaseAdapter{
         View view = View.inflate(mContext, R.layout.history_list_item, null);
         TextView date = (TextView) view.findViewById(R.id.rehab_history_date);
         TextView duration = (TextView) view.findViewById(R.id.rehab_history_duration);
-//        TextView exceeded = (TextView) view.findViewById(R.id.rehab_history_exceeded);
+        TextView exceeded = (TextView) view.findViewById(R.id.rehab_history_exceeded);
         TextView comment = (TextView) view.findViewById(R.id.rehab_history_comment);
 
         //Set text for TextView
         date.setText(mHistoryList.get(position).getDate());
         duration.setText(mHistoryList.get(position).getDuration());
-//        exceeded.setText(mHistoryList.get(position).getExceeded_max());
+        exceeded.setText(String.valueOf(mHistoryList.get(position).getExceeded_max()));
         comment.setText(mHistoryList.get(position).getComment());
 
         return view;

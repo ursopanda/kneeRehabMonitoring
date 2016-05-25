@@ -50,6 +50,7 @@ public class HistoryPatientFragment extends Fragment {
     }
 
 
+
     public interface patientHistoryListener {
         void populateHistoryList(ListView listview);
     }
