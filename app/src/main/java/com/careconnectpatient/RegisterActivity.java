@@ -43,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mSurnameView;
     private TextView mEmailView;
     private EditText mPasswordView;
+    private EditText mConfirmPasswordView;
     private Spinner mGenderView;
     private EditText mPhoneNumberView;
     private View mProgressView;
@@ -62,6 +63,7 @@ public class RegisterActivity extends AppCompatActivity {
         mEmailView = (TextView) findViewById(R.id.register_email);
         mGenderView = (Spinner) findViewById(R.id.gender_spinner);
         mPasswordView = (EditText) findViewById(R.id.register_password);
+        mConfirmPasswordView = (EditText) findViewById(R.id.register_confirm_password);
         mPhoneNumberView = (EditText) findViewById(R.id.register_phone_number);
 
         Button mRegisterButton = (Button) findViewById(R.id.register_button);
@@ -90,6 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
         String password = mPasswordView.getText().toString();
         String gender = mGenderView.getSelectedItem().toString();
         String phone_number = mPhoneNumberView.getText().toString();
+        String confirm_password = mConfirmPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -108,6 +111,16 @@ public class RegisterActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
+            cancel = true;
+        }
+        if (TextUtils.isEmpty(confirm_password)) {
+            mConfirmPasswordView.setError(getString(R.string.error_field_required));
+            focusView = mEmailView;
+            cancel = true;
+        }
+        if(!password.matches(confirm_password)){
+            mConfirmPasswordView.setError(getString(R.string.error_confirm_password));
+            focusView = mEmailView;
             cancel = true;
         }
 

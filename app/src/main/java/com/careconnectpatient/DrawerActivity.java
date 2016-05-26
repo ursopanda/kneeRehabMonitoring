@@ -961,7 +961,7 @@ public class DrawerActivity extends AppCompatActivity
         new AlertDialog.Builder(context)
                 .setTitle("Delete Account")
                 .setMessage("Do you want to delete your account?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
                                 + patient_key);
@@ -971,7 +971,7 @@ public class DrawerActivity extends AppCompatActivity
                         finish();
                     }
                 })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // do nothing
                     }
@@ -995,9 +995,6 @@ public class DrawerActivity extends AppCompatActivity
         oldPass.setHint("Old Password");
         newPass.setHint("New Password");
         confirmPass.setHint("Confirm Password");
-//        oldPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-//        newPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-//        confirmPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         LinearLayout ll=new LinearLayout(context);
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setPadding(40,0,40,0);
@@ -1062,7 +1059,6 @@ public class DrawerActivity extends AppCompatActivity
 
                     private void newPAssError() {
                         Toast.makeText(getBaseContext(), "New passwords don't match!", Toast.LENGTH_SHORT).show();
-                        changeDocFirebase.removeEventListener(changeDocListener);
                     }
 
                     private void initialPassError() {
@@ -1070,7 +1066,7 @@ public class DrawerActivity extends AppCompatActivity
                         changeDocFirebase.removeEventListener(changeDocListener);
                     }
                 });
-        alertDialog.setNegativeButton("No",
+        alertDialog.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -1105,7 +1101,7 @@ public class DrawerActivity extends AppCompatActivity
         new AlertDialog.Builder(context)
                 .setTitle("Delete Account")
                 .setMessage("Do you want to delete your account?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
                                 + doctor_key);
@@ -1115,7 +1111,7 @@ public class DrawerActivity extends AppCompatActivity
                         finish();
                     }
                 })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // do nothing
                     }
@@ -1139,9 +1135,6 @@ public class DrawerActivity extends AppCompatActivity
         oldPass.setHint("Old Password");
         newPass.setHint("New Password");
         confirmPass.setHint("Confirm Password");
-//        oldPass.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-//        newPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-//        confirmPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         LinearLayout ll=new LinearLayout(context);
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setPadding(40,0,40,0);
@@ -1150,8 +1143,6 @@ public class DrawerActivity extends AppCompatActivity
 
         ll.addView(newPass);
         ll.addView(confirmPass);
-//        View view = findViewById(R.id.password_view);
-//        alertDialog.setView(view);
         alertDialog.setView(ll);
         alertDialog.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
@@ -1216,7 +1207,7 @@ public class DrawerActivity extends AppCompatActivity
                         changeDocFirebase.removeEventListener(changeDocListener);
                     }
                 });
-        alertDialog.setNegativeButton("No",
+        alertDialog.setNegativeButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
