@@ -995,8 +995,12 @@ public class DrawerActivity extends AppCompatActivity
         oldPass.setHint("Old Password");
         newPass.setHint("New Password");
         confirmPass.setHint("Confirm Password");
+//        oldPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+//        newPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+//        confirmPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         LinearLayout ll=new LinearLayout(context);
         ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setPadding(40,0,40,0);
 
         ll.addView(oldPass);
 
@@ -1135,13 +1139,19 @@ public class DrawerActivity extends AppCompatActivity
         oldPass.setHint("Old Password");
         newPass.setHint("New Password");
         confirmPass.setHint("Confirm Password");
+//        oldPass.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+//        newPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+//        confirmPass.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
         LinearLayout ll=new LinearLayout(context);
         ll.setOrientation(LinearLayout.VERTICAL);
+        ll.setPadding(40,0,40,0);
 
         ll.addView(oldPass);
 
         ll.addView(newPass);
         ll.addView(confirmPass);
+//        View view = findViewById(R.id.password_view);
+//        alertDialog.setView(view);
         alertDialog.setView(ll);
         alertDialog.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
