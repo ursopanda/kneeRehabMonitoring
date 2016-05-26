@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -30,11 +32,15 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 import com.google.common.primitives.Ints;
 
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -42,8 +48,10 @@ import java.util.concurrent.TimeUnit;
 import Drawer_fragments.AddPatientFragment;
 import Drawer_fragments.BluetoothFragment;
 import Drawer_fragments.DoctorHistoryFragment;
+import Drawer_fragments.DoctorViewFragment;
 import Drawer_fragments.HistoryPatientFragment;
 import Drawer_fragments.PatientListFragment;
+import Drawer_fragments.PatientViewFragment;
 import Drawer_fragments.PreceptAssignFragment;
 import Drawer_fragments.PreceptFragment;
 import Drawer_fragments.RehabFragment;
@@ -55,13 +63,15 @@ public class DrawerActivity extends AppCompatActivity
         AddPatientFragment.addPatientListener, PatientListFragment.patientListListener,
         PreceptAssignFragment.preceptAssignListener, PreceptFragment.preceptListener,
         RehabFragment.rehabListener, HistoryPatientFragment.patientHistoryListener,
-        DoctorHistoryFragment.DoctorHistoryListener{
+        DoctorHistoryFragment.DoctorHistoryListener, PatientViewFragment.patientViewListener,
+        DoctorViewFragment.doctorViewListener{
 
     NavigationView navigationView = null;
     Toolbar toolbar = null;
     String email;
     String name;
     String surname;
+    String gender;
     String addPatientEmail;
     String doctor_key;
     String precept;
@@ -105,11 +115,13 @@ public class DrawerActivity extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_history).setVisible(true);
                 navigationView.getMenu().findItem(R.id.nav_pac_precept).setVisible(true);
                 navigationView.getMenu().findItem(R.id.nav_bluetooth).setVisible(true);
+                navigationView.getMenu().findItem(R.id.nav_patient_view).setVisible(true);
 
                 //Getting patient info from shared preferences
                 email = sharedPreferences.getString("patient_email", "default@patient.com");
                 name = sharedPreferences.getString("patient_name", null);
                 surname = sharedPreferences.getString("patient_surname", null);
+                gender = sharedPreferences.getString("patient_gender", null);
                 doctor_key = sharedPreferences.getString("doctor_key", "no_doctor");
                 precept = sharedPreferences.getString("precept", "no_precept");
 
@@ -130,6 +142,7 @@ public class DrawerActivity extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_add_patient).setVisible(true);
                 navigationView.getMenu().findItem(R.id.nav_patient_list).setVisible(true);
                 navigationView.getMenu().findItem(R.id.nav_doc_precept).setVisible(true);
+                navigationView.getMenu().findItem(R.id.nav_doctor_view).setVisible(true);
                 navigationView.getMenu().findItem(R.id.nav_doctor_history).setVisible(true);
 
                 //Getting doctor info from shared preferences
@@ -259,7 +272,19 @@ public class DrawerActivity extends AppCompatActivity
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.commit();
-        } else if (id == R.id.nav_doc_precept) {
+        } else if (id == R.id.nav_patient_view) {
+            PatientViewFragment fragment = new PatientViewFragment();
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.commit();
+        } else if (id == R.id.nav_doctor_view) {
+            DoctorViewFragment fragment = new DoctorViewFragment();
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.commit();
+        }else if (id == R.id.nav_doc_precept) {
             PreceptAssignFragment fragment = new PreceptAssignFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction =
                     getSupportFragmentManager().beginTransaction();
@@ -871,7 +896,7 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     /*////////////////////////////////////////////////////////////////
-                      METHODS FOR DOCTOR0 HISTORY FRAGMENT
+                      METHODS FOR DOCTOR HISTORY FRAGMENT
     ////////////////////////////////////////////////////////////////*/
 
     @Override
@@ -921,5 +946,283 @@ public class DrawerActivity extends AppCompatActivity
                 allPatients);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+    }
+
+    /*////////////////////////////////////////////////////////////////
+                      METHODS FOR PATIENT VIEW FRAGMENT
+    ////////////////////////////////////////////////////////////////*/
+
+    Firebase changeFirebase;
+    ValueEventListener changeListener;
+
+    @Override
+    public void deleteAccount(Context context) {
+        final String patient_key = email.replace(".","");
+        new AlertDialog.Builder(context)
+                .setTitle("Delete Account")
+                .setMessage("Do you want to delete your account?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
+                                + patient_key);
+                        Log.v("DELETING ACCOUNT", patient_key);
+                        firebase.removeValue();
+                        Toast.makeText(getBaseContext(), "Account deleted!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_delete)
+                .show();
+    }
+
+    @Override
+    public void changePassword(Context context) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setTitle("Change Password");
+        final EditText oldPass = new EditText(context);
+        final EditText newPass = new EditText(context);
+        final EditText confirmPass = new EditText(context);
+
+        oldPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        newPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        confirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+        oldPass.setHint("Old Password");
+        newPass.setHint("New Password");
+        confirmPass.setHint("Confirm Password");
+        LinearLayout ll=new LinearLayout(context);
+        ll.setOrientation(LinearLayout.VERTICAL);
+
+        ll.addView(oldPass);
+
+        ll.addView(newPass);
+        ll.addView(confirmPass);
+        alertDialog.setView(ll);
+        alertDialog.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        final String patient_key = email.replace(".","");
+                        final String mOldPass = oldPass.getText().toString();
+                        final String mNewPass = newPass.getText().toString();
+                        final String mConfirmPass = confirmPass.getText().toString();
+                        changeFirebase = new Firebase("https://care-connect.firebaseio.com/patients/"
+                                + patient_key);
+                        changeListener = changeFirebase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Map<String, Object> pData = (Map<String, Object>) dataSnapshot.getValue();
+                                if(initialPassMatches(pData, mOldPass)){
+                                    if(mNewPass.equals(mConfirmPass)){
+                                        changePass(mNewPass, patient_key);
+                                    }
+                                    else{
+                                        newPAssError();
+                                    }
+                                }
+                                else{
+                                    initialPassError();
+                                }
+                            }
+
+                            private boolean initialPassMatches(Map<String, Object> map, String oldPass) {
+                                String password = (String) map.get("password");
+                                final HashCode hashPassword = Hashing.sha1().hashString(oldPass, Charset.defaultCharset());
+                                String hPass = hashPassword.toString();
+                                return hPass.equals(password);
+                            }
+
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+
+                            }
+                        });
+
+                    }
+
+                    private void changePass(String mNewPass, String user) {
+                        final HashCode hashPassword = Hashing.sha1().hashString(mNewPass, Charset.defaultCharset());
+                        String hPass = hashPassword.toString();
+                        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/");
+                        Firebase passwordRef = firebase.child(user);
+                        Map<String, Object> new_password = new HashMap<String, Object>();
+                        new_password.put("password", hPass);
+                        passwordRef.updateChildren(new_password);
+                        Toast.makeText(getBaseContext(), "Password changed!", Toast.LENGTH_SHORT).show();
+                        changeFirebase.removeEventListener(changeListener);
+                    }
+
+                    private void newPAssError() {
+                        Toast.makeText(getBaseContext(), "New passwords don't match!", Toast.LENGTH_SHORT).show();
+                        changeDocFirebase.removeEventListener(changeDocListener);
+                    }
+
+                    private void initialPassError() {
+                        Toast.makeText(getBaseContext(), "Invalid old password!", Toast.LENGTH_SHORT).show();
+                        changeDocFirebase.removeEventListener(changeDocListener);
+                    }
+                });
+        alertDialog.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = alertDialog.create();
+        alert11.show();
+    }
+
+    @Override
+    public void populatePatientView(View view) {
+        String full_name = name + " " + surname;
+        TextView fullNameView = (TextView) view.findViewById(R.id.pat_view_name_surname);
+        TextView genderView = (TextView) view.findViewById(R.id.pat_view_gender);
+        TextView emailView = (TextView) view.findViewById(R.id.pat_view_email);
+        fullNameView.setText(full_name);
+        genderView.setText(gender);
+        emailView.setText(email);
+    }
+
+    /*////////////////////////////////////////////////////////////////
+                      METHODS FOR DOCTOR VIEW FRAGMENT
+    ////////////////////////////////////////////////////////////////*/
+
+    Firebase changeDocFirebase;
+    ValueEventListener changeDocListener;
+
+    @Override
+    public void deleteDocAccount(Context context) {
+        final String doctor_key = email.replace(".","");
+        new AlertDialog.Builder(context)
+                .setTitle("Delete Account")
+                .setMessage("Do you want to delete your account?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
+                                + doctor_key);
+                        Log.v("DELETING ACCOUNT", doctor_key);
+                        firebase.removeValue();
+                        Toast.makeText(getBaseContext(), "Account deleted!", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_delete)
+                .show();
+    }
+
+    @Override
+    public void changeDocPassword(Context context) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        alertDialog.setTitle("Change Password");
+        final EditText oldPass = new EditText(context);
+        final EditText newPass = new EditText(context);
+        final EditText confirmPass = new EditText(context);
+
+        oldPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        newPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+        confirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+        oldPass.setHint("Old Password");
+        newPass.setHint("New Password");
+        confirmPass.setHint("Confirm Password");
+        LinearLayout ll=new LinearLayout(context);
+        ll.setOrientation(LinearLayout.VERTICAL);
+
+        ll.addView(oldPass);
+
+        ll.addView(newPass);
+        ll.addView(confirmPass);
+        alertDialog.setView(ll);
+        alertDialog.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        final String doctor_key = email.replace(".","");
+                        final String mOldPass = oldPass.getText().toString();
+                        final String mNewPass = newPass.getText().toString();
+                        final String mConfirmPass = confirmPass.getText().toString();
+                        changeDocFirebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
+                                + doctor_key);
+                        changeDocListener = changeDocFirebase.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Map<String, Object> pData = (Map<String, Object>) dataSnapshot.getValue();
+                                if(initialPassMatches(pData, mOldPass)){
+                                    if(mNewPass.equals(mConfirmPass)){
+                                        changePass(mNewPass, doctor_key);
+                                    }
+                                    else{
+                                        newPAssError();
+                                    }
+                                }
+                                else{
+                                    initialPassError();
+                                }
+                            }
+
+                            private boolean initialPassMatches(Map<String, Object> map, String oldPass) {
+                                String password = (String) map.get("password");
+                                final HashCode hashPassword = Hashing.sha1().hashString(oldPass, Charset.defaultCharset());
+                                String hPass = hashPassword.toString();
+                                return hPass.equals(password);
+                            }
+
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+
+                            }
+                        });
+
+                    }
+
+                    private void changePass(String mNewPass, String user) {
+                        final HashCode hashPassword = Hashing.sha1().hashString(mNewPass, Charset.defaultCharset());
+                        String hPass = hashPassword.toString();
+                        Firebase firebase = new Firebase("https://care-connect.firebaseio.com/doctors/");
+                        Firebase passwordRef = firebase.child(user);
+                        Map<String, Object> new_password = new HashMap<>();
+                        new_password.put("password", hPass);
+                        passwordRef.updateChildren(new_password);
+                        Toast.makeText(getBaseContext(), "Password changed!", Toast.LENGTH_SHORT).show();
+                        changeDocFirebase.removeEventListener(changeDocListener);
+                    }
+
+                    private void newPAssError() {
+                        Toast.makeText(getBaseContext(), "New passwords don't match!", Toast.LENGTH_SHORT).show();
+                        changeDocFirebase.removeEventListener(changeDocListener);
+                    }
+
+                    private void initialPassError() {
+                        Toast.makeText(getBaseContext(), "Invalid old password!", Toast.LENGTH_SHORT).show();
+                        changeDocFirebase.removeEventListener(changeDocListener);
+                    }
+                });
+        alertDialog.setNegativeButton("No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = alertDialog.create();
+        alert11.show();
+    }
+
+    @Override
+    public void populateDoctorView(View view) {
+        String full_name = name + " " + surname;
+        TextView fullNameView = (TextView) view.findViewById(R.id.doc_view_name_surname);
+        TextView emailView = (TextView) view.findViewById(R.id.doc_view_email);
+        fullNameView.setText(full_name);
+        emailView.setText(email);
     }
 }

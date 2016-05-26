@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="60dp"
+    tools:context="Drawer_fragments.DoctorViewFragment">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Name Surname"
+        android:gravity="center"
+        android:id="@+id/doc_view_name_surname"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Email:"
+        android:id="@+id/textView20"
+        android:layout_marginTop="76dp"
+        android:layout_below="@+id/doc_view_name_surname"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/doc_view_email"
+        android:layout_alignBottom="@+id/textView20"
+        android:layout_alignStart="@+id/doc_view_change_button" />
+
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="Change passsword"
+        android:id="@+id/doc_view_change_button"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="delete Account"
+        android:id="@+id/doc_view_delete_button"
+        android:layout_below="@+id/doc_view_change_button"
+        android:layout_alignStart="@+id/doc_view_change_button" />
+
+
+</RelativeLayout>

@@ -3,6 +3,16 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_patient_view"
+            android:icon="@drawable/nav_profile"
+            android:title="Profile"
+            android:visible="false" />
+        <item
+            android:id="@+id/nav_doctor_view"
+            android:icon="@drawable/nav_profile"
+            android:title="Profile"
+            android:visible="false" />
+        <item
             android:id="@+id/nav_add_patient"
             android:icon="@drawable/nav_add_patient"
             android:title="Add Patient"
