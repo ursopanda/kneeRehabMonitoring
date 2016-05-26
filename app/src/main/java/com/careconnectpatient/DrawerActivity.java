@@ -1199,7 +1199,6 @@ public class DrawerActivity extends AppCompatActivity
 
                     private void newPAssError() {
                         Toast.makeText(getBaseContext(), "New passwords don't match!", Toast.LENGTH_SHORT).show();
-                        changeDocFirebase.removeEventListener(changeDocListener);
                     }
 
                     private void initialPassError() {
