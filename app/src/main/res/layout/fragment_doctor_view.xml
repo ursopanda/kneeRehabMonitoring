@@ -34,7 +34,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/doc_view_email"
-        android:layout_alignBottom="@+id/textView20"
+        android:layout_alignTop="@+id/textView20"
         android:layout_alignStart="@+id/doc_view_change_button" />
 
     <Button
@@ -52,6 +52,26 @@
         android:id="@+id/doc_view_delete_button"
         android:layout_below="@+id/doc_view_change_button"
         android:layout_alignStart="@+id/doc_view_change_button" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Phone number:"
+        android:id="@+id/textView16"
+        android:layout_below="@+id/textView20"
+        android:layout_toStartOf="@+id/doc_view_email"
+        android:layout_marginTop="31dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/doc_view_phone_number"
+        android:layout_alignBottom="@+id/textView16"
+        android:layout_toEndOf="@+id/textView16"
+        android:layout_marginStart="16dp" />
 
 
 </RelativeLayout>

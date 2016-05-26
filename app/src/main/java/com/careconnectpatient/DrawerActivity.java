@@ -72,6 +72,7 @@ public class DrawerActivity extends AppCompatActivity
     String name;
     String surname;
     String gender;
+    String phone;
     String addPatientEmail;
     String doctor_key;
     String precept;
@@ -122,6 +123,7 @@ public class DrawerActivity extends AppCompatActivity
                 name = sharedPreferences.getString("patient_name", null);
                 surname = sharedPreferences.getString("patient_surname", null);
                 gender = sharedPreferences.getString("patient_gender", null);
+                phone = sharedPreferences.getString("patient_phone", null);
                 doctor_key = sharedPreferences.getString("doctor_key", "no_doctor");
                 precept = sharedPreferences.getString("precept", "no_precept");
 
@@ -148,6 +150,7 @@ public class DrawerActivity extends AppCompatActivity
                 //Getting doctor info from shared preferences
                 email = sharedPreferences.getString("doctor_email", "default@patient.com");
                 name = sharedPreferences.getString("doctor_name", null);
+                phone = sharedPreferences.getString("doctor_phone", null);
                 surname = sharedPreferences.getString("doctor_surname", null);
 
                 //Creates list for all doctor patients
@@ -809,7 +812,7 @@ public class DrawerActivity extends AppCompatActivity
     public void finishRehab(Context context) {
         final EditText comment = (EditText) findViewById(R.id.rehab_comment);
         rehab_comment = comment.getText().toString();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String strDate = sdf.format(new Date());
         Log.v("REHAB DATE", strDate);
         Log.v("REHAB COMMENT", rehab_comment);
@@ -1083,6 +1086,8 @@ public class DrawerActivity extends AppCompatActivity
         TextView fullNameView = (TextView) view.findViewById(R.id.pat_view_name_surname);
         TextView genderView = (TextView) view.findViewById(R.id.pat_view_gender);
         TextView emailView = (TextView) view.findViewById(R.id.pat_view_email);
+        TextView phoneView = (TextView) view.findViewById(R.id.pat_view_phone_number);
+        phoneView.setText(phone);
         fullNameView.setText(full_name);
         genderView.setText(gender);
         emailView.setText(email);
@@ -1222,6 +1227,8 @@ public class DrawerActivity extends AppCompatActivity
         String full_name = name + " " + surname;
         TextView fullNameView = (TextView) view.findViewById(R.id.doc_view_name_surname);
         TextView emailView = (TextView) view.findViewById(R.id.doc_view_email);
+        TextView phoneView = (TextView) view.findViewById(R.id.doc_view_phone_number);
+        phoneView.setText(phone);
         fullNameView.setText(full_name);
         emailView.setText(email);
     }

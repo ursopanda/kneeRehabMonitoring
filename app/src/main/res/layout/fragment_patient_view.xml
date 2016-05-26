@@ -62,8 +62,9 @@
         android:layout_height="wrap_content"
         android:text="Change passsword"
         android:id="@+id/pat_view_change_button"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/textView20"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="127dp" />
 
     <Button
         android:layout_width="250dp"
@@ -71,7 +72,26 @@
         android:text="delete Account"
         android:id="@+id/pat_view_delete_button"
         android:layout_below="@+id/pat_view_change_button"
-        android:layout_alignStart="@+id/pat_view_change_button" />
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Phone number:"
+        android:id="@+id/textView16"
+        android:layout_below="@+id/textView20"
+        android:layout_toStartOf="@+id/pat_view_email"
+        android:layout_marginTop="31dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/pat_view_phone_number"
+        android:layout_alignBottom="@+id/textView16"
+        android:layout_alignStart="@+id/pat_view_email" />
 
 
 </RelativeLayout>
