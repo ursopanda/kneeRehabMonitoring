@@ -467,6 +467,7 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     public void patientAlreadyAddedError() {
+        addPatFirebase.removeEventListener(mListener);
         Toast.makeText(getBaseContext(), "Patient is already added!", Toast.LENGTH_SHORT).show();
     }
 
@@ -485,11 +486,12 @@ public class DrawerActivity extends AppCompatActivity
 
     ChildEventListener cListener;
     Firebase childFirebase;
-    final ArrayList<String> doctorPatients = new ArrayList<>();
+    ArrayList<String> doctorPatients;
 
     @Override
     public void populateList(ListView listView) {
-//        final ArrayList<String> patients = new ArrayList<>();
+        doctorPatients  = new ArrayList<>();
+        //        final ArrayList<String> patients = new ArrayList<>();
         String doc_key = email.replace(".", "");
         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
                 + doc_key + "/");
@@ -497,6 +499,9 @@ public class DrawerActivity extends AppCompatActivity
         final ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, doctorPatients);
         listView.setAdapter(adapter);
+//        if(doctorPatients.isEmpty()){
+//            Toast.makeText(getBaseContext(), "No patients!", Toast.LENGTH_SHORT).show();
+//        }
 
         childFirebase = firebase.child("patients");
         cListener = childFirebase.addChildEventListener(new ChildEventListener() {
@@ -579,12 +584,17 @@ public class DrawerActivity extends AppCompatActivity
 
     @Override
     public void populateSpinner(Spinner spinner) {
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                allPatients);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        if(allPatients.isEmpty()){
+            Toast.makeText(getBaseContext(), "No patients!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    this,
+                    android.R.layout.simple_spinner_item,
+                    allPatients);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+        }
     }
 
     @Override
@@ -614,10 +624,6 @@ public class DrawerActivity extends AppCompatActivity
                       METHODS FOR SHOWING PRECEPT FOR PATIENT
     /////////////////////////////////////////////////////////////////////////*/
 
-    public static boolean isNotEmptyString(final String string) {
-//        return !Strings.isNullOrEmpty(string) && !string.trim().isEmpty();
-        return string != null && !string.isEmpty() && !string.trim().isEmpty();
-    }
 
     @Override
     public void isPrecept(final View view) {
@@ -815,7 +821,7 @@ public class DrawerActivity extends AppCompatActivity
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String strDate = sdf.format(new Date());
         Log.v("REHAB DATE", strDate);
-        Log.v("REHAB COMMENT", rehab_comment);
+        Log.v("rehab comment", rehab_comment);
 
         new AlertDialog.Builder(context)
                 .setTitle("Finish Rehab Session")
@@ -854,6 +860,9 @@ public class DrawerActivity extends AppCompatActivity
         patientHistoryList = new ArrayList<>();
         historyAdapter = new HistoryListAdapter(getApplicationContext(), patientHistoryList);
         String pat_key = email.replace(".","");
+        if(patientHistoryList.isEmpty()){
+            Toast.makeText(getBaseContext(), "Patient has no rehab history!", Toast.LENGTH_SHORT).show();
+        }
         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
                 + pat_key + "/rehab");
         firebase.addChildEventListener(new ChildEventListener() {
@@ -939,16 +948,24 @@ public class DrawerActivity extends AppCompatActivity
             }
         });
         listview.setAdapter(historyAdapter);
+        if(allPatients.isEmpty()){
+            Toast.makeText(getBaseContext(), "No patients!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public void populateHistorySpinner(Spinner spinner) {
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_item,
-                allPatients);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        if(allPatients.isEmpty()){
+            Toast.makeText(getBaseContext(), "No patients!", Toast.LENGTH_SHORT).show();
+        }else{
+            final ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                    this,
+                    android.R.layout.simple_spinner_item,
+                    allPatients);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(adapter);
+        }
+
     }
 
     /*////////////////////////////////////////////////////////////////

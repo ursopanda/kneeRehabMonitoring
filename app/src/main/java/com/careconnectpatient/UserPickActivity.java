@@ -11,9 +11,6 @@ import com.firebase.client.Firebase;
 
 public class UserPickActivity extends AppCompatActivity {
 
-    private String PAT = "patient";
-    private String DOC = "doctor";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Initializing Firebase
@@ -27,6 +24,7 @@ public class UserPickActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
+        String PAT = "patient";
         editor.putString("user_type", PAT);
         editor.apply();
 
@@ -39,6 +37,7 @@ public class UserPickActivity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        String DOC = "doctor";
         editor.putString("user_type", DOC);
         editor.apply();
 

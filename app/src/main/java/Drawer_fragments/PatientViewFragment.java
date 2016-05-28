@@ -27,6 +27,7 @@ public class PatientViewFragment extends Fragment implements View.OnClickListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getActivity().setTitle("Account");
         View view = inflater.inflate(R.layout.fragment_patient_view, container, false);
         mCommunicator.populatePatientView(view);
         return view;

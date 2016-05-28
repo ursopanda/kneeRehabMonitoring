@@ -28,14 +28,10 @@ import java.nio.charset.Charset;
 import java.util.Map;
 
 import database.Doctor;
-import database.FirebaseHelper;
 import database.Patient;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
     private UserRegisterTask mAuthTask = null;
 
     // UI references.
@@ -149,13 +145,8 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
+
     private void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
@@ -198,10 +189,7 @@ public class RegisterActivity extends AppCompatActivity {
         return password.length() >= 4;
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
+
     public class UserRegisterTask {
 
         private final String mName;
@@ -289,9 +277,10 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         private void addPatient(Firebase firebase) {
-            FirebaseHelper fb = new FirebaseHelper();
+//            FirebaseHelper fb = new FirebaseHelper();
             Patient patient = new Patient(mName, mSurname, mEmail, mPassword, mGender, mPhoneNumber);
-            fb.newPatient(patient, firebase);
+//            fb.newPatient(patient, firebase);
+            firebase.setValue(patient);
             patientFirebase.removeEventListener(patientListener);
 
             Toast.makeText(getBaseContext(), "Registration successful!", Toast.LENGTH_LONG).show();
@@ -301,10 +290,10 @@ public class RegisterActivity extends AppCompatActivity {
 
         private void addDoctor(Firebase firebase) {
             doctorFirebase.removeEventListener(doctorListener);
-            FirebaseHelper fb = new FirebaseHelper();
+//            FirebaseHelper fb = new FirebaseHelper();
             Doctor doctor = new Doctor(mName, mSurname, mEmail, mPassword, mPhoneNumber);
-            fb.newDoctor(doctor, firebase);
-            patientFirebase.removeEventListener(patientListener);
+//            fb.newDoctor(doctor, firebase);
+            firebase.setValue(doctor);
 
             Toast.makeText(getBaseContext(), "Registration successful!", Toast.LENGTH_LONG).show();
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);

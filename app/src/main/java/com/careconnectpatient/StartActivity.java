@@ -5,15 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
 
 import com.firebase.client.Firebase;
 
 public class StartActivity extends AppCompatActivity {
-
-    //Firebase
-    Firebase mRootRef;
-    TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
