@@ -9,6 +9,9 @@ import android.view.View;
 
 import com.firebase.client.Firebase;
 
+/**
+ * Class for user type picking
+ */
 public class UserPickActivity extends AppCompatActivity {
 
     @Override
@@ -21,6 +24,7 @@ public class UserPickActivity extends AppCompatActivity {
 
     public void StartPatient(View view) {
 
+        //Putting patients' user type to shared preferences
         SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
@@ -35,13 +39,13 @@ public class UserPickActivity extends AppCompatActivity {
 
     public void StartDoctor(View view) {
 
+        //Putting doctors' user type to shared preferences
         SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String DOC = "doctor";
         editor.putString("user_type", DOC);
         editor.apply();
 
-        //TODO: create doctor login/register
         final Context context = this;
         Intent intent = new Intent(context, StartActivity.class);
         startActivity(intent);

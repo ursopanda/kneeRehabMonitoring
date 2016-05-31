@@ -13,7 +13,7 @@ import android.widget.Button;
 import com.careconnectpatient.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Class for showing patient account information
  */
 public class PatientViewFragment extends Fragment implements View.OnClickListener {
 

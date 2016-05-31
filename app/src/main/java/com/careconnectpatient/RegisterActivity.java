@@ -34,7 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private UserRegisterTask mAuthTask = null;
 
-    // UI references.
+    // UI references
     private EditText mNameView;
     private EditText mSurnameView;
     private TextView mEmailView;
@@ -54,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //getting all input fields
         mNameView = (EditText) findViewById(R.id.register_name);
         mSurnameView = (EditText) findViewById(R.id.register_surname);
         mEmailView = (TextView) findViewById(R.id.register_email);
@@ -145,7 +146,10 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Method for populating progress animation
+     * @param show - boolean parameter whether to show progress or not
+     */
     private void showProgress(final boolean show) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -185,8 +189,11 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    //Checking password with regex
     private boolean isPasswordValid(String password) {
+        //Pattern with a number, lower case letter, upper case letter, special symbol and minimal length of 8 characters
         String pattern_advanced = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+        //Pattern with a number, lower case letter and minimal length of 6 characters
         String pattern = "^(?=.*[0-9])(?=.*[a-z])(?=\\S+$).{6,}$";
         return password.matches(pattern);
     }
@@ -307,6 +314,9 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method which gets invoked when back button is pressed
+     */
     public void RegisterBack(View view) {
         final Context context = this;
         Intent intent = new Intent(context, StartActivity.class);

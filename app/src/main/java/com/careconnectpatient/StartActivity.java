@@ -19,12 +19,14 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
     }
 
+    //Login button press
     public void StartLogin(View view) {
         final Context context = this;
         Intent intent = new Intent(context, LoginActivity.class);
         startActivity(intent);
     }
 
+    //Register button press
     public void StartRegister(View view) {
         final Context context = this;
         Intent intent = new Intent(context, RegisterActivity.class);

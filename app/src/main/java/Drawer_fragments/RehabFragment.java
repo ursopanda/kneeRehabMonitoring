@@ -12,6 +12,9 @@ import android.widget.Button;
 
 import com.careconnectpatient.R;
 
+/**
+ * Class for patients' rehab managing
+ */
 public class RehabFragment extends Fragment implements View.OnClickListener  {
 
     rehabListener mCommunicator;

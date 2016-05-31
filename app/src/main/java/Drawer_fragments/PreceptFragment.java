@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.careconnectpatient.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Class for showing precept information for patient
  */
 public class PreceptFragment extends Fragment {
 

@@ -12,7 +12,7 @@ import android.widget.ListView;
 import com.careconnectpatient.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Class for populating rehab history list for patient
  */
 public class HistoryPatientFragment extends Fragment {
 

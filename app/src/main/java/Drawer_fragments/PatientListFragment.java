@@ -10,6 +10,9 @@ import android.widget.ListView;
 
 import com.careconnectpatient.R;
 
+/**
+ * Class for displaying list of doctors' patients
+ */
 public class PatientListFragment extends ListFragment {
 
     patientListListener mCommunicator;

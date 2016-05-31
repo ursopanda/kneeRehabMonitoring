@@ -13,6 +13,9 @@ import android.widget.Spinner;
 
 import com.careconnectpatient.R;
 
+/**
+ * Class for populating list for doctors' patient list
+ */
 public class DoctorHistoryFragment extends Fragment implements View.OnClickListener{
 
 
@@ -28,6 +31,7 @@ public class DoctorHistoryFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getActivity().setTitle("History");
+        //Getting spinner information and passing it to method
         View view = inflater.inflate(R.layout.fragment_doctor_history, container, false);
         Spinner spinner = (Spinner) view.findViewById(R.id.doctor_history_spinner);
         mCommunicator.populateHistorySpinner(spinner);

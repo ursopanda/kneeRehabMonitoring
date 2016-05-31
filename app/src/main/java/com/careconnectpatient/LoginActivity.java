@@ -29,8 +29,6 @@ import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
 
-
-
     private UserLoginTask mAuthTask = null;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -48,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         // Set up the login form.
         mPasswordView = (EditText) findViewById(R.id.password);
-
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         if (mEmailSignInButton != null) {
             mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -71,10 +68,6 @@ public class LoginActivity extends AppCompatActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-//        final Context context = this;
-//        if (mAuthTask != null) {
-//            return;
-//        }
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
@@ -87,25 +80,17 @@ public class LoginActivity extends AppCompatActivity {
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
+        // Validation for email and password fields
         if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
         }
-
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
         }
-
-//        // Check for a valid email address.
-//        if (TextUtils.isEmpty(email)) {
-//            mEmailView.setError(getString(R.string.error_field_required));
-//            focusView = mEmailView;
-//            cancel = true;
-//        }
 
         if (cancel) {
             Toast.makeText(getBaseContext(), "Login failed!", Toast.LENGTH_LONG).show();
@@ -150,9 +135,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-
-
+    /**
+     * Public class for login login
+     */
     public class UserLoginTask {
 
         private final String mEmail;
@@ -163,6 +148,11 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         String user_type = sharedPreferences.getString("user_type", null);
 
+        /**
+         * Class for handling the login
+         * @param email - email parameter
+         * @param password - password parameter
+         */
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -228,16 +218,28 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
+        /**
+         * populates error if email address is invalid
+         */
         private void noUserError() {
             Toast.makeText(getBaseContext(), "Invalid email!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
             startActivity(intent);
         }
 
+        /**
+         * Method checks whether user exists in database
+         * @param pData - user object from database
+         */
         private boolean userExists(Map<String, Object> pData) {
             return pData != null;
         }
 
+        /**
+         * Method for trying patient login
+         * @param fPass - password from input form
+         * @param fEmail - email from input form
+         */
         public void tryPatientLogin(String fPass, String fEmail){
 
             boolean isLogged = (fPass.matches(mPassword));
@@ -257,6 +259,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
+        /**
+         * Method for trying doctor login
+         * @param fPass - password from input form
+         * @param mEmail - email from input form
+         */
         public void tryDoctorLogin(String fPass, String mEmail){
             boolean isLogged = (fPass.matches(mPassword));
 
@@ -275,12 +282,19 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
+        /**
+         * Method for populating login error
+         */
         public void loginFailed(){
             Toast.makeText(getBaseContext(), "Login failed!", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getBaseContext(), LoginActivity.class);
             startActivity(intent);
         }
 
+        /**
+         * Method for putting patient data in shared preferences
+         * @param map - patient object from database
+         */
         public void sharedPatient(Map<String, Object> map){
             String name = (String)map.get("name");
             String surname = (String)map.get("surname");
@@ -309,6 +323,10 @@ public class LoginActivity extends AppCompatActivity {
             editor.apply();
         }
 
+        /**
+         * Method for putting patient data in shared preferences
+         * @param map - doctor object from database
+         */
         public void sharedDoctor(Map<String, Object> map){
             String name = (String)map.get("name");
             String surname = (String)map.get("surname");
@@ -327,7 +345,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    //Back Button
+    /**
+     * Method for pressing back button
+     */
     public void LoginBack(View view) {
         final Context context = this;
         Intent intent = new Intent(context, StartActivity.class);

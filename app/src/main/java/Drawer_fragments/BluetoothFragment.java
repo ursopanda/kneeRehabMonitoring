@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.careconnectpatient.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Class for bluetooth device list population and selecting rehab knee device
  */
 public class BluetoothFragment extends Fragment {
 

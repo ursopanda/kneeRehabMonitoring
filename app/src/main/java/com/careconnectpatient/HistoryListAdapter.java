@@ -11,7 +11,7 @@ import java.util.List;
 import database.RehabSession;
 
 /**
- * Created by austris on 25/05/2016.
+ * Class for populating custom history list items
  */
 public class HistoryListAdapter extends BaseAdapter{
 

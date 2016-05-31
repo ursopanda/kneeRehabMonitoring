@@ -58,6 +58,9 @@ import Drawer_fragments.RehabFragment;
 import database.Precept;
 import database.RehabSession;
 
+/**
+ * Class for managing all the items in menu drawer
+ */
 public class DrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         AddPatientFragment.addPatientListener, PatientListFragment.patientListListener,
@@ -100,6 +103,7 @@ public class DrawerActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //Getting user type from shared preferences
         SharedPreferences sharedPreferences = getSharedPreferences("my_preferences", MODE_PRIVATE);
         String user_type = sharedPreferences.getString("user_type", null);
 
@@ -165,6 +169,11 @@ public class DrawerActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Method for setting up users' drawer header
+     * @param fullName - users full name
+     * @param email - users email address
+     */
     public void setText(String fullName, String email) {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -175,6 +184,10 @@ public class DrawerActivity extends AppCompatActivity
         pEmail.setText(email);
     }
 
+    /**
+     * Method for exiting the application
+     * Alternative for logging out
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -225,9 +238,10 @@ public class DrawerActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
+        // Handle navigation view item clicks here.
+
+        int id = item.getItemId();
         if (id == R.id.nav_rehab) {
             //Set the fragment initially
             RehabFragment fragment = new RehabFragment();
@@ -310,7 +324,9 @@ public class DrawerActivity extends AppCompatActivity
     //All patient list with full names
     ArrayList<String> fullPatientsList = getFullPatientsList(allPatients);
 
-    //Method for creating an initial patient list for doctor signed in
+    /**
+     * Method for creating an initial patient list for doctor signed in
+     */
     public void createPatientList() {
         String doc_key = email.replace(".", "");
         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
@@ -348,7 +364,10 @@ public class DrawerActivity extends AppCompatActivity
         });
     }
 
-    //Method for getting full name list of patients
+    /**
+     * Method for getting full name list of patients
+     * @param arrayList - list of all patients
+     */
     public ArrayList<String> getFullPatientsList(ArrayList<String> arrayList) {
         final ArrayList<String> tmp_list = new ArrayList<>();
         for (String mPatient : arrayList) {
@@ -369,7 +388,10 @@ public class DrawerActivity extends AppCompatActivity
         return tmp_list;
     }
 
-    //Returning patient full names from database
+    /**
+     * Returning patient full names from database
+     * @param map - patients object from database
+     */
     public String getPatientFullName(Map<String, Object> map) {
         String name = (String) map.get("name");
         String surname = (String) map.get("surname");
@@ -383,6 +405,10 @@ public class DrawerActivity extends AppCompatActivity
     Firebase addPatFirebase;
     ValueEventListener mListener;
 
+    /**
+     * Method for checking handling whether patients exists or not
+     * @param tmp_email - patients email address
+     */
     @Override
     public void isPatient(String tmp_email) {
         addPatientEmail = tmp_email.replace(".", "");
@@ -405,7 +431,9 @@ public class DrawerActivity extends AppCompatActivity
         });
     }
 
-    //Method for checking whether there is a patient already added for doctor
+    /**
+     * Method for checking whether there is a patient already added for doctor
+     */
     public void checkPatient() {
         String doc_key = email.replace(".", "");
         addPatFirebase = new Firebase("https://care-connect.firebaseio.com/doctors/"
@@ -428,10 +456,12 @@ public class DrawerActivity extends AppCompatActivity
 
             }
         });
-//        firebase.removeEventListener(mListener);
     }
 
-    //Method for adding a patient for the doctor
+    /**
+     * Method for adding a patient for the doctor
+     * @param patientEmail - patient email
+     */
     public void addPatient(String patientEmail) {
         //Getting doctor id_key
         String doc_key = email.replace(".", "");
@@ -446,7 +476,10 @@ public class DrawerActivity extends AppCompatActivity
         patFirebase.setValue(doc_key);
     }
 
-    //Method returning is there such a patient added or not
+    /**
+     * Method returning is there such a patient added or not
+     * @param dataSnapshot - database object
+     */
     public boolean exists(DataSnapshot dataSnapshot) {
         return dataSnapshot.getValue() != null;
     }
@@ -474,6 +507,10 @@ public class DrawerActivity extends AppCompatActivity
     Firebase childFirebase;
     ArrayList<String> doctorPatients;
 
+    /**
+     * Method for populating doctors' patient list
+     * @param listView - list view item
+     */
     @Override
     public void populateList(ListView listView) {
         doctorPatients  = new ArrayList<>();
@@ -507,6 +544,7 @@ public class DrawerActivity extends AppCompatActivity
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                //Removes child from list if it's removed from database
                 String patient = (String) dataSnapshot.getValue();
                 Log.v("REMOVING PATIENT", patient);
                 doctorPatients.remove(patient);
@@ -523,16 +561,25 @@ public class DrawerActivity extends AppCompatActivity
 
             }
         });
-        //childFirebase.removeEventListener(cListener);
     }
 
     /*////////////////////////////////////////////////////////////////
                       METHODS FOR ASSIGNING PRECEPT
     ////////////////////////////////////////////////////////////////*/
 
+    //Database parameters
     Firebase preceptFirebase;
     ValueEventListener precpetListener;
 
+    /**
+     * Method for assigning precept for patient
+     * @param patient_email - patients email address
+     * @param o_angle - optimal flexion angle
+     * @param m_angle - maximal flexion angle
+     * @param duration - rehab duration
+     * @param frequency - rehab frequency
+     *                  Parameters from input form
+     */
     @Override
     public void assignPrecept(String patient_email, int o_angle, int m_angle, int duration, int frequency) {
         preceptFirebase = new Firebase("https://care-connect.firebaseio.com/patients/"
@@ -545,6 +592,7 @@ public class DrawerActivity extends AppCompatActivity
                 if (exists(dataSnapshot)) {
                     preceptExistsError();
                 } else {
+                    //assigning precept and tis values for patient
                     preceptFirebase.setValue(precept);
                     preceptAdded();
                 }
@@ -567,9 +615,13 @@ public class DrawerActivity extends AppCompatActivity
         Toast.makeText(getBaseContext(), "Precept added!", Toast.LENGTH_SHORT).show();
     }
 
-
+    /**
+     * Method for populating spinner for rehab assignment
+     * @param spinner - spinner item from rehab assigning form
+     */
     @Override
     public void populateSpinner(Spinner spinner) {
+        //Populates toast message if patient list is empty
         if(allPatients.isEmpty()){
             Toast.makeText(getBaseContext(), "No patients!", Toast.LENGTH_SHORT).show();
         }
@@ -583,8 +635,14 @@ public class DrawerActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Method for removing patients' precept
+     * @param patient_key - patient identification key
+     * @param context - Activities' context
+     */
     @Override
     public void removeAssignment(final String patient_key, Context context) {
+        //Building an alert dialog
         new AlertDialog.Builder(context)
                 .setTitle("Remove Precept")
                 .setMessage("Are you sure you want to remove the precept?")
@@ -610,12 +668,16 @@ public class DrawerActivity extends AppCompatActivity
                       METHODS FOR SHOWING PRECEPT FOR PATIENT
     /////////////////////////////////////////////////////////////////////////*/
 
-
+    /**
+     * Method for filling patients' precept information
+     */
     @Override
     public void isPrecept(final View view) {
+        //Default values from putting precept and doctor into sharedPreferences (in case values don't exist)
         String no_precept = "no_precept";
         String no_doctor = "no_doctor";
         Log.v("DOC_KEY", doctor_key);
+
         if (!doctor_key.equals(no_doctor)) {
             Firebase docFirebas = new Firebase("https://care-connect.firebaseio.com/doctors/" + doctor_key);
             docFirebas.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -636,7 +698,7 @@ public class DrawerActivity extends AppCompatActivity
         }
 
         Log.v("PRECEPT", precept);
-//        if (precept.trim().equals(no_precept.trim())) {
+        //If no precept is assigned for patient
         if (!precept.equals(no_precept)) {
             String pat_key = email.replace(".", "");
             Firebase patFirebase = new Firebase("https://care-connect.firebaseio.com/patients/" + pat_key + "/precept");
@@ -658,20 +720,27 @@ public class DrawerActivity extends AppCompatActivity
         }
     }
 
-
+    /**
+     * Method for inserting doctors' information into patients' precept fragment
+     * @param map - doctors' database object
+     */
     private void populatePreceptDoc(Map<String, Long> map, View view) {
         String fullName = String.valueOf(map.get("name")) + " " + String.valueOf(map.get("surname"));
         String doc_phone = String.valueOf(map.get("phone_number"));
 
-
-        TextView nameview = (TextView) view.findViewById(R.id.pac_precept_doc_name);
+        TextView nameView = (TextView) view.findViewById(R.id.pac_precept_doc_name);
         TextView phoneView = (TextView) view.findViewById(R.id.pac_precept_doc_nr);
 
-        nameview.setText(fullName);
+        nameView.setText(fullName);
         phoneView.setText(doc_phone);
     }
 
+    /**
+     * Method for inserting precept information into patients' precept fragment
+     * @param map - patients' precept database object
+     */
     private void populatePreceptInfo(Map<String, Long> map, View view) {
+        //Getting values from the database object
         String o_angle = String.valueOf(map.get("optimal_angle"));
         String m_angle = String.valueOf(map.get("maximal_angle"));
         String duration = String.valueOf(map.get("duration"));
@@ -679,11 +748,13 @@ public class DrawerActivity extends AppCompatActivity
         duration_minutes = Integer.parseInt(duration);
         max_angle = Integer.parseInt(m_angle);
 
+        //Getting views
         TextView oAngleView = (TextView) view.findViewById(R.id.pac_precept_optimal);
         TextView mAngleView = (TextView) view.findViewById(R.id.pac_precept_maximal);
         TextView durationView = (TextView) view.findViewById(R.id.pac_precept_duration);
         TextView frequencyView = (TextView) view.findViewById(R.id.pac_precept_frequency);
 
+        //Assigning values to views
         oAngleView.setText(o_angle);
         mAngleView.setText(m_angle);
         durationView.setText(duration);
@@ -710,14 +781,20 @@ public class DrawerActivity extends AppCompatActivity
     //Converting duration minutes to milliseconds
     long full_duration_millis;
     String rehab_comment;
+
+    /**
+     * Method for handling button and field enablement
+     */
     @Override
     public void timer(final View view) {
         full_duration_millis = TimeUnit.MINUTES.toMillis(duration_minutes);
+        //Getting all buttons
         final Button startButton = (Button) view.findViewById(R.id.start_button);
         final Button stopButton = (Button) view.findViewById(R.id.stop_button);
         final Button finishButton = (Button) view.findViewById(R.id.finish_button);
         final Button resetButton = (Button) view.findViewById(R.id.reset_button);
         final EditText comment = (EditText) view.findViewById(R.id.rehab_comment);
+        //Setting initial enablement
         comment.setFocusableInTouchMode(false);
         resetButton.setEnabled(false);
         finishButton.setEnabled(false);
@@ -728,10 +805,9 @@ public class DrawerActivity extends AppCompatActivity
                 TimeUnit.MILLISECONDS.toSeconds(full_duration_millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(full_duration_millis)));
 
         final TextView countdownTimerText = (TextView) view.findViewById(R.id.countdownText);
+        countdownTimerText.setText(full_duration);
         //dummy value
         final TextView angleText = (TextView) view.findViewById(R.id.knee_angle_text);
-
-        countdownTimerText.setText(full_duration);
 
         if(duration_minutes != 0){
             startButton.setOnClickListener(new View.OnClickListener() {
@@ -742,7 +818,6 @@ public class DrawerActivity extends AppCompatActivity
                     finishButton.setEnabled(false);
                     stopButton.setEnabled(true);
 //                    startTimer(full_duration_millis, countdownTimerText);
-                    //dummy mathod implementation
                     startTimer(full_duration_millis, countdownTimerText, angleText);
                 }
             });
@@ -751,6 +826,7 @@ public class DrawerActivity extends AppCompatActivity
                 @Override
                 public void onClick(View v) {
                     long time_spent = full_duration_millis - millisLeft;
+                    //converting rehab duration from milliseconds to MMmin SSsec format
                     rehab_duration = String.format("%02d min, %02d sec",
                             TimeUnit.MILLISECONDS.toMinutes(time_spent),
                             TimeUnit.MILLISECONDS.toSeconds(time_spent) -
@@ -788,42 +864,39 @@ public class DrawerActivity extends AppCompatActivity
         }
     }
 
-//    public void startTimer(long millis, final TextView timerText){
-//        countDownTimer = new CountDownTimer(millis + 1000, 1000) {
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//                String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
-//                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
-//                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
-//                timerText.setText(hms);
-//                millisLeft = millisUntilFinished;
-//                Log.v("Millis left", String.valueOf(millisLeft));
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                timerText.setText("TIME'S UP!!");
-//            }
-//        }.start();
-//    }
 
     double current_angle;
     int counter;
+    //Method with dummy implementation
 
-    //Dummy method
+    /**
+     * Timer method
+     * @param millis - initial millsecond count
+     * @param timerText - timer display text field
+     * @param angleText - angle display text field
+     */
     public void startTimer(long millis, final TextView timerText, final TextView angleText){
+        //Adding a second for displaying purposes
         countDownTimer = new CountDownTimer(millis + 1000, 1000) {
+            /**
+             * Method for each tick (tick length: 1 second)
+             * @param millisUntilFinished - milliseconds until the timer runs out of time
+             */
             @Override
             public void onTick(long millisUntilFinished) {
+                //String value to display each second with time left
                 String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
                 timerText.setText(hms);
+
                 //generating angle values
                 current_angle = Math.random() * 120;
                 double display_angle = Math.floor(current_angle * 100) / 100;
                 angleText.setText(String.valueOf(display_angle));
                 Log.v("CURRENT ANGLE", String.valueOf(current_angle));
+
+                //Increasing counter value in case of exceeding maximal flexion angle
                 if(current_angle > max_angle){
                     counter++;
                 }
@@ -838,38 +911,48 @@ public class DrawerActivity extends AppCompatActivity
         }.start();
     }
 
+    /**
+     * Method for finishing rehab session
+     * Gets invoked on FINISH button press
+     * @param context - activities' context
+     */
     @Override
     public void finishRehab(Context context) {
+        //Getting all fragments view, buttons and input fields
         final EditText comment = (EditText) findViewById(R.id.rehab_comment);
         final TextView countdownTimerText = (TextView) findViewById(R.id.countdownText);
         final Button startButton = (Button) findViewById(R.id.start_button);
         final Button finishButton = (Button) findViewById(R.id.finish_button);
         final TextView angleText = (TextView) findViewById(R.id.knee_angle_text);
+
         final String full_duration = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(full_duration_millis),
                 TimeUnit.MILLISECONDS.toMinutes(full_duration_millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(full_duration_millis)),
                 TimeUnit.MILLISECONDS.toSeconds(full_duration_millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(full_duration_millis)));
         rehab_comment = comment.getText().toString();
+        //Adding current date time
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String strDate = sdf.format(new Date());
         Log.v("REHAB DATE", strDate);
         Log.v("rehab comment", rehab_comment);
 
+        //Building alert dialog to check whether patient wants to finish rehab session
         new AlertDialog.Builder(context)
                 .setTitle("Finish Rehab Session")
                 .setMessage("Do you want to finish your rehab session?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO: add exceeded max
-                        //For testing purposes
+                        //Creating new rehab object
                         RehabSession session = new RehabSession(rehab_comment, strDate, rehab_duration, counter);
 //                        RehabSession session = new RehabSession(rehab_comment, strDate, rehab_duration);
 
                         String patient_key = email.replace(".", "");
+                        //Adding rehab object to database
                         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
                         + patient_key + "/rehab");
                         firebase.push().setValue(session);
                         Toast.makeText(getBaseContext(), "Rehab session saved!", Toast.LENGTH_SHORT).show();
 
+                        //Reseting all the views information
                         millisLeft = 0;
                         comment.setText("");
                         countdownTimerText.setText(full_duration);
@@ -889,12 +972,17 @@ public class DrawerActivity extends AppCompatActivity
     /*////////////////////////////////////////////////////////////////
                       METHODS FOR PATIENT HISTORY FRAGMENT
     ////////////////////////////////////////////////////////////////*/
+
+    //History list database variables
     HistoryListAdapter historyAdapter;
     List<RehabSession> patientHistoryList;
 
-
+    /**
+     * Method for populating patients' rehab history list
+     * @param listView - list view
+     */
     @Override
-    public void populateHistoryList(ListView listview) {
+    public void populateHistoryList(ListView listView) {
         patientHistoryList = new ArrayList<>();
         historyAdapter = new HistoryListAdapter(getApplicationContext(), patientHistoryList);
         String pat_key = email.replace(".","");
@@ -908,8 +996,10 @@ public class DrawerActivity extends AppCompatActivity
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Map<String, Object> pData = (Map<String, Object>) dataSnapshot.getValue();
                 if(pData == null){
+                    //Populating error if there is no rehab history
                     noHistoryError();
                 }
+                //adding session to patients' session history
                 addSessionToHistory(pData);
                 historyAdapter.notifyDataSetChanged();
             }
@@ -934,9 +1024,13 @@ public class DrawerActivity extends AppCompatActivity
 
             }
         });
-        listview.setAdapter(historyAdapter);
+        listView.setAdapter(historyAdapter);
     }
 
+    /**
+     * Method for adding session history to session history arrayList
+     * @param map - patients rehab sessions' database object
+     */
     private void addSessionToHistory(Map<String, Object> map) {
         String comment = (String) map.get("comment");
         String date = (String) map.get("date");
@@ -947,6 +1041,7 @@ public class DrawerActivity extends AppCompatActivity
 //        RehabSession rSession = new RehabSession(comment,date,duration);
         patientHistoryList.add(rSession);
     }
+
     public void noHistoryError(){
         Toast.makeText(getBaseContext(), "Patient has no rehab history!", Toast.LENGTH_SHORT).show();
     }
@@ -955,9 +1050,13 @@ public class DrawerActivity extends AppCompatActivity
                       METHODS FOR DOCTOR HISTORY FRAGMENT
     ////////////////////////////////////////////////////////////////*/
 
+    /**
+     * Method for populating doctors' history list
+     * @param listview - list view
+     * @param patient_key - patients' identification key
+     */
     @Override
     public void populateDoctorHistoryList(ListView listview, String patient_key) {
-
 
         patientHistoryList = new ArrayList<>();
         historyAdapter = new HistoryListAdapter(getApplicationContext(), patientHistoryList);
@@ -997,6 +1096,10 @@ public class DrawerActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Method for populating history spinner for doctors patients' history list
+     * @param spinner - spinner item
+     */
     @Override
     public void populateHistorySpinner(Spinner spinner) {
         if(allPatients.isEmpty()){
@@ -1016,12 +1119,18 @@ public class DrawerActivity extends AppCompatActivity
                       METHODS FOR PATIENT VIEW FRAGMENT
     ////////////////////////////////////////////////////////////////*/
 
+    //Patient firebase variables
     Firebase changeFirebase;
     ValueEventListener changeListener;
 
+    /**
+     * Method for deleting patients' account
+     * @param context - activities' context
+     */
     @Override
     public void deleteAccount(Context context) {
         final String patient_key = email.replace(".","");
+        //Building alert dialog
         new AlertDialog.Builder(context)
                 .setTitle("Delete Account")
                 .setMessage("Do you want to delete your account?")
@@ -1044,14 +1153,20 @@ public class DrawerActivity extends AppCompatActivity
                 .show();
     }
 
+    /**
+     * Method for changing the patients' password
+     * @param context - activities' context
+     */
     @Override
     public void changePassword(Context context) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         alertDialog.setTitle("Change Password");
+        //Setting edit text variables for alert dialog
         final EditText oldPass = new EditText(context);
         final EditText newPass = new EditText(context);
         final EditText confirmPass = new EditText(context);
 
+        //Setting input types as password for editText fields
         oldPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
         newPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
         confirmPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -1059,14 +1174,17 @@ public class DrawerActivity extends AppCompatActivity
         oldPass.setHint("Old Password");
         newPass.setHint("New Password");
         confirmPass.setHint("Confirm Password");
-        LinearLayout ll=new LinearLayout(context);
+
+        //Design for alert dialog
+        LinearLayout ll = new LinearLayout(context);
         ll.setOrientation(LinearLayout.VERTICAL);
         ll.setPadding(40,0,40,0);
 
+        //Adding views to alert dialog
         ll.addView(oldPass);
-
         ll.addView(newPass);
         ll.addView(confirmPass);
+
         alertDialog.setView(ll);
         alertDialog.setPositiveButton("Yes",
                 new DialogInterface.OnClickListener() {
@@ -1094,6 +1212,11 @@ public class DrawerActivity extends AppCompatActivity
                                 }
                             }
 
+                            /**
+                             * Method for checking whether initial password from database matches with one enter
+                             * @param map - patients' database object
+                             * @param oldPass - patients' inserted old password
+                             */
                             private boolean initialPassMatches(Map<String, Object> map, String oldPass) {
                                 String password = (String) map.get("password");
                                 final HashCode hashPassword = Hashing.sha1().hashString(oldPass, Charset.defaultCharset());
@@ -1109,6 +1232,11 @@ public class DrawerActivity extends AppCompatActivity
 
                     }
 
+                    /**
+                     * Method for changing patients password
+                     * @param mNewPass - patients' entered new key
+                     * @param user - users identification key
+                     */
                     private void changePass(String mNewPass, String user) {
                         final HashCode hashPassword = Hashing.sha1().hashString(mNewPass, Charset.defaultCharset());
                         String hPass = hashPassword.toString();
@@ -1141,6 +1269,9 @@ public class DrawerActivity extends AppCompatActivity
         alert11.show();
     }
 
+    /**
+     * Method for populating information for patients' account fragment
+     */
     @Override
     public void populatePatientView(View view) {
         String full_name = name + " " + surname;
@@ -1158,9 +1289,14 @@ public class DrawerActivity extends AppCompatActivity
                       METHODS FOR DOCTOR VIEW FRAGMENT
     ////////////////////////////////////////////////////////////////*/
 
+    //Doctors' firebase variables
     Firebase changeDocFirebase;
     ValueEventListener changeDocListener;
 
+    /**
+     * Method for deleting doctors' account
+     * @param context - activities' context
+     */
     @Override
     public void deleteDocAccount(Context context) {
         final String doctor_key = email.replace(".","");
@@ -1186,6 +1322,10 @@ public class DrawerActivity extends AppCompatActivity
                 .show();
     }
 
+    /**
+     * Method for changing doctors' passwrod
+     * @param context - activities' context
+     */
     @Override
     public void changeDocPassword(Context context) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);

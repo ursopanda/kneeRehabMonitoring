@@ -16,7 +16,7 @@ import android.widget.Spinner;
 import com.careconnectpatient.R;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Class for assigning precept for patient
  */
 public class PreceptAssignFragment extends Fragment implements View.OnClickListener {
 
@@ -54,6 +54,7 @@ public class PreceptAssignFragment extends Fragment implements View.OnClickListe
         String patient = mPatientSpinnerView.getSelectedItem().toString();
         Context context = getContext();
 
+        //Switching between buttons
         switch(v.getId()){
             case R.id.assign_precept_button:
 
@@ -139,7 +140,6 @@ public class PreceptAssignFragment extends Fragment implements View.OnClickListe
     }
 
     public interface preceptAssignListener{
-        //TODO:assign all parameters to function
         void populateSpinner(Spinner spinner);
         void assignPrecept(String patient, int o_angle, int m_angle, int duration, int frequency);
         void removeAssignment(String patient, Context context);

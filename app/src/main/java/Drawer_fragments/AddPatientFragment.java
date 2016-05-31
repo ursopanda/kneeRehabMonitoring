@@ -12,6 +12,9 @@ import android.widget.EditText;
 
 import com.careconnectpatient.R;
 
+/**
+ * class for adding patient to doctor's patient
+ */
 public class AddPatientFragment extends Fragment implements View.OnClickListener{
 
     addPatientListener mCommunicator;
@@ -33,6 +36,7 @@ public class AddPatientFragment extends Fragment implements View.OnClickListener
     //Override method from View.OnClickListener
     @Override
     public void onClick(final View v) {
+        //getting email from input field
         EditText mEmailView = (EditText) getView().findViewById(R.id.add_patient_email);
         String add_email = mEmailView.getText().toString();
         mCommunicator.isPatient(add_email);
