@@ -186,7 +186,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean isPasswordValid(String password) {
-        return password.length() >= 4;
+        String pattern_advanced = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+        String pattern = "^(?=.*[0-9])(?=.*[a-z])(?=\\S+$).{6,}$";
+        return password.matches(pattern);
     }
 
 

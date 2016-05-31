@@ -77,6 +77,7 @@ public class DrawerActivity extends AppCompatActivity
     String doctor_key;
     String precept;
     int duration_minutes = 0;
+    int max_angle = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,23 +199,6 @@ public class DrawerActivity extends AppCompatActivity
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        new AlertDialog.Builder(this)
-//                .setIcon(android.R.drawable.ic_dialog_alert)
-//                .setTitle("Closing Activity")
-//                .setMessage("Are you sure you want to close this activity?")
-//                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-//                {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        finish();
-//                    }
-//
-//                })
-//                .setNegativeButton("No", null)
-//                .show();
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -432,6 +416,7 @@ public class DrawerActivity extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (exists(dataSnapshot)) {
                     patientAlreadyAddedError();
+                    return;
                 } else {
                     addPatient(addPatientEmail);
                     patientAdded();
@@ -472,6 +457,7 @@ public class DrawerActivity extends AppCompatActivity
     }
 
     public void patientDoesNotExistError() {
+        addPatFirebase.removeEventListener(mListener);
         Toast.makeText(getBaseContext(), "Patient does not exist!", Toast.LENGTH_SHORT).show();
     }
 
@@ -691,6 +677,7 @@ public class DrawerActivity extends AppCompatActivity
         String duration = String.valueOf(map.get("duration"));
         String frequency = String.valueOf(map.get("frequency"));
         duration_minutes = Integer.parseInt(duration);
+        max_angle = Integer.parseInt(m_angle);
 
         TextView oAngleView = (TextView) view.findViewById(R.id.pac_precept_optimal);
         TextView mAngleView = (TextView) view.findViewById(R.id.pac_precept_maximal);
@@ -741,6 +728,9 @@ public class DrawerActivity extends AppCompatActivity
                 TimeUnit.MILLISECONDS.toSeconds(full_duration_millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(full_duration_millis)));
 
         final TextView countdownTimerText = (TextView) view.findViewById(R.id.countdownText);
+        //dummy value
+        final TextView angleText = (TextView) view.findViewById(R.id.knee_angle_text);
+
         countdownTimerText.setText(full_duration);
 
         if(duration_minutes != 0){
@@ -751,7 +741,9 @@ public class DrawerActivity extends AppCompatActivity
                     resetButton.setEnabled(false);
                     finishButton.setEnabled(false);
                     stopButton.setEnabled(true);
-                    startTimer(full_duration_millis, countdownTimerText);
+//                    startTimer(full_duration_millis, countdownTimerText);
+                    //dummy mathod implementation
+                    startTimer(full_duration_millis, countdownTimerText, angleText);
                 }
             });
 
@@ -778,6 +770,7 @@ public class DrawerActivity extends AppCompatActivity
                 public void onClick(View v) {
                     millisLeft = 0;
                     comment.setText("");
+                    angleText.setText("00");
                     countdownTimerText.setText(full_duration);
                     startButton.setEnabled(true);
                     finishButton.setEnabled(false);
@@ -795,7 +788,30 @@ public class DrawerActivity extends AppCompatActivity
         }
     }
 
-    public void startTimer(long millis, final TextView timerText){
+//    public void startTimer(long millis, final TextView timerText){
+//        countDownTimer = new CountDownTimer(millis + 1000, 1000) {
+//            @Override
+//            public void onTick(long millisUntilFinished) {
+//                String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millisUntilFinished),
+//                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
+//                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
+//                timerText.setText(hms);
+//                millisLeft = millisUntilFinished;
+//                Log.v("Millis left", String.valueOf(millisLeft));
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//                timerText.setText("TIME'S UP!!");
+//            }
+//        }.start();
+//    }
+
+    double current_angle;
+    int counter;
+
+    //Dummy method
+    public void startTimer(long millis, final TextView timerText, final TextView angleText){
         countDownTimer = new CountDownTimer(millis + 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
@@ -803,6 +819,14 @@ public class DrawerActivity extends AppCompatActivity
                         TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)),
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
                 timerText.setText(hms);
+                //generating angle values
+                current_angle = Math.random() * 120;
+                double display_angle = Math.floor(current_angle * 100) / 100;
+                angleText.setText(String.valueOf(display_angle));
+                Log.v("CURRENT ANGLE", String.valueOf(current_angle));
+                if(current_angle > max_angle){
+                    counter++;
+                }
                 millisLeft = millisUntilFinished;
                 Log.v("Millis left", String.valueOf(millisLeft));
             }
@@ -817,6 +841,13 @@ public class DrawerActivity extends AppCompatActivity
     @Override
     public void finishRehab(Context context) {
         final EditText comment = (EditText) findViewById(R.id.rehab_comment);
+        final TextView countdownTimerText = (TextView) findViewById(R.id.countdownText);
+        final Button startButton = (Button) findViewById(R.id.start_button);
+        final Button finishButton = (Button) findViewById(R.id.finish_button);
+        final TextView angleText = (TextView) findViewById(R.id.knee_angle_text);
+        final String full_duration = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(full_duration_millis),
+                TimeUnit.MILLISECONDS.toMinutes(full_duration_millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(full_duration_millis)),
+                TimeUnit.MILLISECONDS.toSeconds(full_duration_millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(full_duration_millis)));
         rehab_comment = comment.getText().toString();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final String strDate = sdf.format(new Date());
@@ -830,7 +861,7 @@ public class DrawerActivity extends AppCompatActivity
                     public void onClick(DialogInterface dialog, int which) {
                         //TODO: add exceeded max
                         //For testing purposes
-                        RehabSession session = new RehabSession(rehab_comment, strDate, rehab_duration, 0);
+                        RehabSession session = new RehabSession(rehab_comment, strDate, rehab_duration, counter);
 //                        RehabSession session = new RehabSession(rehab_comment, strDate, rehab_duration);
 
                         String patient_key = email.replace(".", "");
@@ -838,6 +869,13 @@ public class DrawerActivity extends AppCompatActivity
                         + patient_key + "/rehab");
                         firebase.push().setValue(session);
                         Toast.makeText(getBaseContext(), "Rehab session saved!", Toast.LENGTH_SHORT).show();
+
+                        millisLeft = 0;
+                        comment.setText("");
+                        countdownTimerText.setText(full_duration);
+                        startButton.setEnabled(true);
+                        finishButton.setEnabled(false);
+                        angleText.setText("00");
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -860,15 +898,18 @@ public class DrawerActivity extends AppCompatActivity
         patientHistoryList = new ArrayList<>();
         historyAdapter = new HistoryListAdapter(getApplicationContext(), patientHistoryList);
         String pat_key = email.replace(".","");
-        if(patientHistoryList.isEmpty()){
-            Toast.makeText(getBaseContext(), "Patient has no rehab history!", Toast.LENGTH_SHORT).show();
-        }
+//        if(patientHistoryList.isEmpty()){
+//            Toast.makeText(getBaseContext(), "Patient has no rehab history!", Toast.LENGTH_SHORT).show();
+//        }
         Firebase firebase = new Firebase("https://care-connect.firebaseio.com/patients/"
                 + pat_key + "/rehab");
         firebase.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Map<String, Object> pData = (Map<String, Object>) dataSnapshot.getValue();
+                if(pData == null){
+                    noHistoryError();
+                }
                 addSessionToHistory(pData);
                 historyAdapter.notifyDataSetChanged();
             }
@@ -905,6 +946,9 @@ public class DrawerActivity extends AppCompatActivity
         RehabSession rSession = new RehabSession(comment,date,duration,exceeded_max);
 //        RehabSession rSession = new RehabSession(comment,date,duration);
         patientHistoryList.add(rSession);
+    }
+    public void noHistoryError(){
+        Toast.makeText(getBaseContext(), "Patient has no rehab history!", Toast.LENGTH_SHORT).show();
     }
 
     /*////////////////////////////////////////////////////////////////

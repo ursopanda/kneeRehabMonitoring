@@ -88,18 +88,24 @@ public class LoginActivity extends AppCompatActivity {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
+        if (TextUtils.isEmpty(password)) {
+            mPasswordView.setError(getString(R.string.error_field_required));
             focusView = mPasswordView;
             cancel = true;
         }
 
-        // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
         }
+
+//        // Check for a valid email address.
+//        if (TextUtils.isEmpty(email)) {
+//            mEmailView.setError(getString(R.string.error_field_required));
+//            focusView = mEmailView;
+//            cancel = true;
+//        }
 
         if (cancel) {
             Toast.makeText(getBaseContext(), "Login failed!", Toast.LENGTH_LONG).show();
@@ -202,8 +208,9 @@ public class LoginActivity extends AppCompatActivity {
                             Map<String, Object> pData = (Map<String, Object>)dataSnapshot.getValue();
                             if(userExists(pData)){
                                 String tPass = (String)pData.get("password");
+                                String tEmail = (String)pData.get("email");
                                 showProgress(true);
-                                tryDoctorLogin(tPass);
+                                tryDoctorLogin(tPass, tEmail);
                                 sharedDoctor(pData);
                             }
                             else {
@@ -250,7 +257,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
-        public void tryDoctorLogin(String fPass){
+        public void tryDoctorLogin(String fPass, String mEmail){
             boolean isLogged = (fPass.matches(mPassword));
 
             if(isLogged){
