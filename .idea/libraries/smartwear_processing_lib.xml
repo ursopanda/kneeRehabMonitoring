@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="smartwear-processing-lib">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/src/main/java/smartwear-processing-lib.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

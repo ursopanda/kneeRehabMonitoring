@@ -1,12 +1,18 @@
 package com.careconnectpatient;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +24,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,8 +50,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import Bluetooth.BluetoothService;
+import Bluetooth.SmartWearApplication;
 import Drawer_fragments.AddPatientFragment;
 import Drawer_fragments.BluetoothFragment;
 import Drawer_fragments.DoctorHistoryFragment;
@@ -57,6 +67,7 @@ import Drawer_fragments.PreceptFragment;
 import Drawer_fragments.RehabFragment;
 import database.Precept;
 import database.RehabSession;
+import lv.edi.SmartWearProcessing.Sensor;
 
 /**
  * Class for managing all the items in menu drawer
@@ -67,7 +78,7 @@ public class DrawerActivity extends AppCompatActivity
         PreceptAssignFragment.preceptAssignListener, PreceptFragment.preceptListener,
         RehabFragment.rehabListener, HistoryPatientFragment.patientHistoryListener,
         DoctorHistoryFragment.DoctorHistoryListener, PatientViewFragment.patientViewListener,
-        DoctorViewFragment.doctorViewListener{
+        DoctorViewFragment.doctorViewListener, BluetoothFragment.bluetoothListener{
 
     NavigationView navigationView = null;
     Toolbar toolbar = null;
@@ -890,9 +901,34 @@ public class DrawerActivity extends AppCompatActivity
                         TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)));
                 timerText.setText(hms);
 
-                //generating angle values
-                current_angle = Math.random() * 120;
-                double display_angle = Math.floor(current_angle * 100) / 100;
+                //generating random angle values
+//                current_angle = Math.random() * 120;
+//                double display_angle = Math.floor(current_angle * 100) / 100;
+
+                Sensor[] sensorArray = application.getSensorArray();
+
+                float normFirstAccXValue = sensorArray[0].getAccNormX();
+                float normFirstAccYValue = sensorArray[0].getAccNormY();
+                float normFirstAccZValue = sensorArray[0].getAccNormZ();
+
+                float normSecondAccXValue = sensorArray[1].getAccNormX();
+                float normSecondAccYValue = sensorArray[1].getAccNormY();
+                float normSecondAccZValue = sensorArray[1].getAccNormZ();
+
+                float x = (normFirstAccXValue * normSecondAccXValue +
+                        normFirstAccYValue * normSecondAccYValue +
+                        normFirstAccZValue * normSecondAccZValue);
+                double gA = Math.sqrt(Math.pow(normFirstAccXValue,2) +
+                        Math.pow(normFirstAccYValue,2) +
+                        Math.pow(normFirstAccZValue,2));
+                double gB = Math.sqrt(Math.pow(normSecondAccXValue,2) +
+                        Math.pow(normSecondAccYValue,2) +
+                        Math.pow(normSecondAccZValue,2));
+                //double cos = (x/(gA * gB));
+                double cos = x;
+                double degrees = Math.toDegrees(Math.acos(cos));
+                double display_angle = Math.round(degrees);
+
                 angleText.setText(String.valueOf(display_angle));
                 Log.v("CURRENT ANGLE", String.valueOf(current_angle));
 
@@ -1433,4 +1469,162 @@ public class DrawerActivity extends AppCompatActivity
         fullNameView.setText(full_name);
         emailView.setText(email);
     }
+
+    /*////////////////////////////////////////////////////////////////
+                      METHODS FOR BLUETOOTH FRAGMENT
+    ////////////////////////////////////////////////////////////////*/
+
+    // Return Intent extra
+    public static String EXTRA_DEVICE_ADDRESS = "device_address";
+
+    // Member fields
+    private BluetoothAdapter mBtAdapter;
+    private ArrayAdapter<String> mPairedDevicesArrayAdapter;
+    private ArrayAdapter<String> mNewDevicesArrayAdapter;
+    private SmartWearApplication application = new SmartWearApplication();; // refference to application instance stores global data
+    BluetoothDevice mDevice; // target bluetooth device
+
+    private final Handler handler = new Handler(); // handler that handles messages from other threads
+    private static SmartWearApplication singleton;
+    BluetoothService bluetoothService = new BluetoothService(singleton); // creating new bluetooth service instance
+
+
+    private void doDiscovery() {
+        // Turn on sub-title for new devices
+        findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
+
+        // If we're already discovering, stop it
+        if (mBtAdapter.isDiscovering()) {
+            mBtAdapter.cancelDiscovery();
+        }
+        // Request discover from BluetoothAdapter
+        mBtAdapter.startDiscovery();
+    }
+
+    // The on-click listener for all devices in the ListViews
+    private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
+        public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
+            // Cancel discovery because it's costly and we're about to connect
+            mBtAdapter.cancelDiscovery();
+
+            // Get the device MAC address, which is the last 17 chars in the View
+            String info = ((TextView) v).getText().toString();
+            String address = info.substring(info.length() - 17);
+
+            EXTRA_DEVICE_ADDRESS = address;
+            mDevice = mBtAdapter.getRemoteDevice(address); // instantate bluetooth target device
+
+            Log.v("The address is", address);
+            Toast.makeText(getBaseContext(), "Device connected!", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    // The BroadcastReceiver that listens for discovered devices and
+    // changes the title when discovery is finished
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+
+            // When discovery finds a device
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                // Get the BluetoothDevice object from the Intent
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                // If it's already paired, skip it, because it's been listed already
+                if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
+                    mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                }
+                // When discovery is finished, change the Activity title
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+                if (mNewDevicesArrayAdapter.getCount() == 0) {
+                    String noDevices = "No devices found";
+                    mNewDevicesArrayAdapter.add(noDevices);
+                }
+            }
+        }
+    };
+
+    @Override
+    public void onCreateBT(View view, Context context){
+
+        // Set result CANCELED incase the user backs out
+        setResult(Activity.RESULT_CANCELED);
+
+        // Initialize array adapters. One for already paired devices and
+        // one for newly discovered devices
+        mPairedDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
+        mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
+
+        // Find and set up the ListView for paired devices
+        ListView pairedListView = (ListView) view.findViewById(R.id.paired_devices);
+        pairedListView.setAdapter(mPairedDevicesArrayAdapter);
+        pairedListView.setOnItemClickListener(mDeviceClickListener);
+
+        // Find and set up the ListView for newly discovered devices
+        ListView newDevicesListView = (ListView) view.findViewById(R.id.new_devices);
+        newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
+        newDevicesListView.setOnItemClickListener(mDeviceClickListener);
+
+        // Register for broadcasts when a device is discovered
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        this.registerReceiver(mReceiver, filter);
+
+        // Register for broadcasts when discovery has finished
+        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        this.registerReceiver(mReceiver, filter);
+
+        // Get the local Bluetooth adapter
+        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        // Get a set of currently paired devices
+        Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
+
+        // If there are paired devices, add each one to the ArrayAdapter
+        if (pairedDevices.size() > 0) {
+            view.findViewById(R.id.title_paired_devices).setVisibility(View.VISIBLE);
+            for (BluetoothDevice device : pairedDevices) {
+                mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+            }
+        } else {
+            String noDevices = "Not Paired";
+            mPairedDevicesArrayAdapter.add(noDevices);
+        }
+    }
+
+    @Override
+    public void scanBluetoothDevices(View v, Context context) {
+        doDiscovery();
+        v.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void populateBluetoothList(View view) {
+
+    }
+
+    @Override
+    public void onDestroyBT(){
+        //Make sure we're not doing discovery anymore
+        if (mBtAdapter != null) {
+            mBtAdapter.cancelDiscovery();
+        }
+        // Unregister broadcast listeners
+        this.unregisterReceiver(mReceiver);
+    }
+
+
+    @Override
+    public void onConnectClick(View view, Context context){
+            if(mDevice!=null){ // if bluetooth connection target device is selected
+            if(!bluetoothService.isConnected()){ //if connection is not already open
+                bluetoothService.connectDevice(mDevice, handler); // connect target device in bluetooth service class
+            } else{
+                bluetoothService.disconnectDevice(); // if bluetooth connection on going and connect button pressed stop bluetooth connection and deisconect device
+            }
+
+        } else{
+            Toast.makeText(getBaseContext(),"Select Target Device First",Toast.LENGTH_SHORT).show();// warn user, that target is not selected
+        }
+    }
+
 }
